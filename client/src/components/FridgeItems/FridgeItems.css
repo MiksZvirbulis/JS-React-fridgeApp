@@ -1,0 +1,8 @@
+.FridgeItems {
+  width: 95%;
+  margin: 10px auto;
+  display: flex;
+  flex-flow: row wrap;
+  box-sizing: border-box;
+  justify-content: center;
+}

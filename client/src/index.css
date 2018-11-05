@@ -1,0 +1,120 @@
+html,
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Verdana, Geneva, 'DejaVu Sans', sans-serif;
+  font-size: 14px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #fafafa;
+  color: #666;
+}
+
+form {
+  width: 100%;
+  margin: 10px;
+  display: flex;
+  align-items: center;
+  flex-flow: column wrap;
+}
+
+form > div {
+  width: 70%;
+}
+
+input,
+select,
+textarea {
+  display: flex;
+  height: 40px;
+  text-indent: 5px;
+  border-radius: 2px;
+  color: #fff;
+  background-color: #c2325f;
+  border: none;
+  width: 100%;
+  margin: 10px auto;
+  box-sizing: border-box;
+  font-family: inherit;
+  font-size: 12px;
+}
+
+textarea {
+  padding: 5px;
+  min-height: 50px;
+  resize: vertical;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+}
+
+input.invalid,
+select.invalid,
+textarea.invalid {
+  border: 1px solid #ffae42;
+}
+
+input::placeholder,
+select::placeholder,
+textarea::placeholder {
+  color: #fff;
+}
+
+select option:first-child {
+  display: none;
+}
+
+button {
+  background-color: #32c24d;
+  color: #fff;
+  box-shadow: none;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  font-size: 15px;
+  padding: 10px;
+  border-radius: 2px;
+}
+
+button:hover {
+  background-color: #228535;
+}
+
+button:disabled {
+  background-color: #ccc;
+  color: #666666;
+  cursor: not-allowed;
+}
+
+/* Overwriting default DatePicker Styles */
+
+.react-datepicker {
+  border-color: #ccc !important;
+}
+
+.react-datepicker__input-container, .react-datepicker-wrapper {
+  width: 100%;
+}
+
+.react-datepicker__day--selected,
+.react-datepicker__day--in-selecting-range,
+.react-datepicker__day--in-range,
+.react-datepicker__day--keyboard-selected,
+.react-datepicker__day--selected:hover,
+.react-datepicker__day--in-selecting-range:hover,
+.react-datepicker__day--in-range:hover {
+  background-color: #c2325f !important;
+}
+
+.react-datepicker__header {
+  background-color: #711d37 !important;
+}
+
+.react-datepicker__current-month,
+.react-datepicker-time__header,
+.react-datepicker__day-name {
+  color: #ffffff !important;
+}

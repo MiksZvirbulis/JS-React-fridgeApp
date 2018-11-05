@@ -1,0 +1,35 @@
+.FridgeItem {
+  margin: 5px;
+  display: flex;
+  cursor: pointer;
+  background-color: #32c24d;
+  padding: 5px;
+  border-radius: 5px;
+  flex: 20%;
+}
+
+.FridgeItem:hover {
+  background-color: #c2325f;
+}
+
+.ItemName {
+  display: flex;
+  flex-flow: column wrap;
+  justify-content: center;
+}
+
+.ItemName:hover~.ItemDescription {
+  display: block;
+}
+
+.ItemDescription {
+  display: none;
+  position: absolute;
+  background-color: #fff;
+  color: #000;
+  border-radius: 5px;
+  padding: 10px;
+  margin-top: 50px;
+  z-index: 100;
+  border: 1px solid #ccc;
+}

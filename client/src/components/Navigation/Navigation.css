@@ -1,0 +1,90 @@
+.Navigation {
+  width: 100%;
+  position: fixed;
+  top: 0;
+  background-color: #32c24d;
+  height: 50px;
+}
+
+.Navigation ul {
+  width: 100%;
+  margin: 0;
+  display: flex;
+  list-style: none;
+  flex-flow: row wrap;
+  justify-content: flex-end;
+  padding-inline-start: 0;
+}
+
+.Navigation ul li {
+  height: 50px;
+  display: flex;
+}
+
+.Navigation ul li.toggle {
+  display: none;
+}
+
+.Navigation ul li.logo {
+  margin-right: auto;
+}
+
+.Navigation ul li.logo a,
+.Navigation ul li.logo a.active {
+  background-color: #32c24d;
+}
+
+.Navigation ul li.logo img {
+  width: 42px;
+  height: 42px;
+}
+
+.Navigation ul li a {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  padding: 0 10px;
+  text-decoration: none;
+  color: #fff;
+}
+
+.Navigation ul li:hover,
+.Navigation ul li a.active {
+  background-color: #c2325f;
+}
+
+@media screen and (max-width: 768px) {
+  .Navigation ul {
+    flex-direction: column;
+    align-items: center;
+    background-color: #32c24d;
+  }
+
+  .Navigation ul li {
+    display: none;
+  }
+
+  .Navigation ul li a.active {
+    background-color: inherit;
+  }
+
+  .Navigation ul li.logo {
+    display: none;
+  }
+
+  .Navigation ul li.toggle {
+    display: flex;
+    margin-right: auto;
+  }
+
+  .Navigation ul li.toggle:hover ~ li {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    border-top: 1px solid #fff;
+  }
+
+  .Navigation ul {
+    flex-flow: row column;
+  }
+}
