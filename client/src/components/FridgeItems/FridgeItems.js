@@ -15,6 +15,7 @@ class FridgeItems extends Component {
       items = this.props.items.map(item => {
         return <FridgeItem
           key={item.id}
+          id={item.id}
           type={item.type}
           name={item.name}
           comment={item.comment}

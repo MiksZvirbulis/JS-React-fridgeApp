@@ -10,7 +10,7 @@ const Input = (props) => {
     break;
     case 'select':
     formElement = (
-      <select defaultValue="disabled" onChange={props.changed} className={!props.valid ? "invalid" : null}>
+      <select defaultValue={props.value != null ? props.value : "disabled"} onChange={props.changed} className={!props.valid ? "invalid" : null}>
         <option value="disabled" disabled>{props.elementConfig.placeholder}</option>
         {props.elementConfig.options.map(option => (
           <option key={option.value} value={option.value}>{option.display}</option>

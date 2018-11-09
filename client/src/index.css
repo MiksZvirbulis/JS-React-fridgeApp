@@ -89,6 +89,24 @@ button:disabled {
   cursor: not-allowed;
 }
 
+#error {
+  display: block;
+  border-radius: 2px;
+  padding: 5px;
+  margin: 10px;
+  color: #D8000C;
+  background-color: #FFBABA;
+}
+
+#success {
+  display: block;
+  border-radius: 2px;
+  padding: 5px;
+  margin: 10px;
+  color: #4F8A10;
+  background-color: #DFF2BF;
+}
+
 /* Overwriting default DatePicker Styles */
 
 .react-datepicker {

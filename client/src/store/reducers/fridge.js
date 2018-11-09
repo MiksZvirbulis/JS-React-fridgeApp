@@ -3,6 +3,7 @@ import updateObject from '../../utils/updateObject'
 
 const initialState = {
   items: [],
+  item: [],
   loading: false,
   error: false,
   added: false,
@@ -20,8 +21,20 @@ export default function fridge(state = initialState, action) {
     case AT.FRIDGE_ADD_ITEM:
     return updateObject(state, { loading: true, added: false } )
     case AT.FRIDGE_ADD_ITEM_SUCCESS:
-    return updateObject(state, { loading: false, item: action.item , added: true })
+    return updateObject(state, { loading: false, item: action.item, added: true })
     case AT.FRIDGE_ADD_ITEM_ERROR:
+    return updateObject(state, { loading: false, error: action.error, added: false })
+    case AT.FRIDGE_FETCH_ITEM:
+    return updateObject(state, { loading: true, item: [] } )
+    case AT.FRIDGE_FETCH_ITEM_SUCCESS:
+    return updateObject(state, { loading: false, item: action.item })
+    case AT.FRIDGE_FETCH_ITEM_ERROR:
+    return updateObject(state, { loading: false, error: action.error })
+    case AT.FRIDGE_UPDATE_ITEM:
+    return updateObject(state, { loading: true, item: [], added: false } )
+    case AT.FRIDGE_UPDATE_ITEM_SUCCESS:
+    return updateObject(state, { loading: false, item: action.item, added: true })
+    case AT.FRIDGE_UPDATE_ITEM_ERROR:
     return updateObject(state, { loading: false, error: action.error, added: false })
     default:
     return state;

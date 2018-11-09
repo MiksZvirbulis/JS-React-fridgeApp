@@ -1,4 +1,6 @@
 export {
   fetchFridgeItemsAsync,
-  addFridgeItemsAsync
+  addFridgeItemsAsync,
+  fetchFridgeItemAsync,
+  updateFridgeItemAsync
 } from './fridge'

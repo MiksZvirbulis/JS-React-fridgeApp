@@ -1,6 +1,6 @@
 import React from 'react'
 import Aux from 'react-aux'
-import { NavLink } from 'react-router-dom';
+import { NavLink } from 'react-router-dom'
 
 const NavigationItem = (props) => {
   const linkClass = props.logo ? "logo" : null || props.toggle ? "toggle" : null
