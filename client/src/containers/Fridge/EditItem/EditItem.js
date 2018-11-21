@@ -34,7 +34,7 @@ class EditItem extends Component {
           type: 'text'
         },
         validation: {
-          minLength: 2,
+          minLength: 1,
           maxLength: 10,
           isRequired: true
         },
@@ -100,7 +100,7 @@ class EditItem extends Component {
         value: ''
       }
     },
-    formValid: true
+    formValid: false
   }
 
   componentDidMount() {
@@ -117,7 +117,6 @@ class EditItem extends Component {
           const updatedForm = updateObject(this.state.formData, { [key]: updatedElement })
           this.setState({ formData: updatedForm })
         }
-        console.log(this.state.formData.open)
       }
     })
   }
@@ -174,9 +173,11 @@ class EditItem extends Component {
       item[key] = value
     }
     const itemData = {
+      id: this.props.match.params.id,
       ...item
     }
     this.props.editFridgeItem(this.props.match.params.id, itemData)
+    this.setState({ formValid: false })
   }
 
   render() {
@@ -200,7 +201,7 @@ class EditItem extends Component {
     ))
     let message = ''
     if (this.props.error) {
-      message = <div id="error">{this.props.error}</div>
+      message = <div id="error">{this.props.error.message}</div>
     }
     if (this.props.added) {
       message = <div id="success">Item was successfully updated!</div>
@@ -210,7 +211,7 @@ class EditItem extends Component {
         <h1>Edit Item</h1>
         <form onSubmit={this.handleSubmit}>
           {message}
-          {form}
+          {this.props.error ? null : form}
           <button disabled={!this.state.formValid ? 'disabled' : null}>Edit Item</button>
         </form>
       </div>

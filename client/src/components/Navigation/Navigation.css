@@ -6,6 +6,11 @@
   height: 50px;
 }
 
+.Navigation input#toggle,
+.Navigation label {
+  display: none;
+}
+
 .Navigation ul {
   width: 100%;
   margin: 0;
@@ -19,10 +24,6 @@
 .Navigation ul li {
   height: 50px;
   display: flex;
-}
-
-.Navigation ul li.toggle {
-  display: none;
 }
 
 .Navigation ul li.logo {
@@ -55,36 +56,40 @@
 
 @media screen and (max-width: 768px) {
   .Navigation ul {
-    flex-direction: column;
+    display: none;
+    flex-flow: row column;
     align-items: center;
     background-color: #32c24d;
   }
 
-  .Navigation ul li {
-    display: none;
+  .Navigation label {
+    display: flex;
+    height: 50px;
+    color: #ffffff;
+    text-align: center;
+    justify-content: center;
+    flex-direction: column;
   }
 
-  .Navigation ul li a.active {
-    background-color: inherit;
+  .Navigation ul li a,
+  .Navigation ul li {
+    width: 100%;
+  }
+
+  .Navigation ul li a:hover {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
   }
 
   .Navigation ul li.logo {
-    display: none;
+    
   }
 
-  .Navigation ul li.toggle {
-    display: flex;
-    margin-right: auto;
-  }
-
-  .Navigation ul li.toggle:hover ~ li {
+  .Navigation input#toggle:checked ~ ul {
     display: flex;
     width: 100%;
     justify-content: center;
     border-top: 1px solid #fff;
-  }
-
-  .Navigation ul {
-    flex-flow: row column;
   }
 }

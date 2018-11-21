@@ -64,7 +64,6 @@ export const addFridgeItemsAsync = item => {
     try {
       const response = await axios.post('http://localhost:5000/api/fridge', item)
       dispatch(addFridgeItemsSuccess(item, response.data))
-      dispatch(fetchFridgeItemsAsync())
     } catch (error) {
       dispatch(addFridgeItemsError(error))
     }

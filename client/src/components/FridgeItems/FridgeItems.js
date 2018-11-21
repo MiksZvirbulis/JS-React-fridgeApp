@@ -34,7 +34,6 @@ class FridgeItems extends Component {
 
 const mapStateToProps = state => {
   return {
-    items: state.fridge.items,
     error: state.fridge.error
   }
 }

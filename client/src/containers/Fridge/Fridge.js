@@ -9,14 +9,16 @@ import * as actions from '../../store/actions/'
 
 class Fridge extends Component {
   componentDidMount() {
-    this.props.fetchItems()
+    if (this.props.items.length <= 0) {
+      this.props.fetchItems()
+    }
   }
 
   render() {
     return (
       <div className="Fridge">
         <h1>Fridge Items</h1>
-        <FridgeItems />
+        <FridgeItems items={this.props.items} />
       </div>
     )
   }

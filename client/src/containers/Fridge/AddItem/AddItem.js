@@ -34,7 +34,7 @@ class AddItem extends Component {
           type: 'text'
         },
         validation: {
-          minLength: 2,
+          minLength: 1,
           maxLength: 10,
           isRequired: true
         },
