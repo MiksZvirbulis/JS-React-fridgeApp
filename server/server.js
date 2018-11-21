@@ -73,6 +73,31 @@ router.put('/fridge/:id', (req, res) => {
   })
 })
 
+// POST request for the deletion of a specific fridge item
+router.post('/fridge/delete/:id', (req, res) => {
+  fs.readFile(fridgeItemsFile, (error, data) => {
+    if (error) {
+      res.send('READING_ERROR')
+    } else {
+      let fridgeItems = JSON.parse(data)
+      const fridgeItem = fridgeItems.find(item => item.id === req.params.id)
+      if (fridgeItem) {
+        const fridgeItemIndex = fridgeItems.findIndex(item => item.id === req.params.id)
+        fridgeItems.splice(fridgeItemIndex, 1)
+        fs.writeFile(fridgeItemsFile, JSON.stringify(fridgeItems), err => {
+          if (err) {
+            res.send('WRITING_ERROR')
+          } else {
+            res.send('SUCCESS')
+          }
+        })
+      } else {
+        res.send('NOT_FOUND')
+      }
+    }
+  })
+})
+
 // POST request to add a new fridge item, will add to JSON file for now
 router.post('/fridge', (req, res) => {
   fs.readFile(fridgeItemsFile, (error, data) => {

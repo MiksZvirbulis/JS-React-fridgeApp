@@ -16,6 +16,7 @@ form {
   display: flex;
   align-items: center;
   flex-flow: column wrap;
+  text-align: center;
 }
 
 form > div {
@@ -67,6 +68,10 @@ select option:first-child {
   display: none;
 }
 
+form.aligned {
+  text-align: center;
+}
+
 button {
   background-color: #32c24d;
   color: #fff;
@@ -77,6 +82,7 @@ button {
   font-size: 15px;
   padding: 10px;
   border-radius: 2px;
+  margin: 5px;
 }
 
 button:hover {

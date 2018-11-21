@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import Input from '../../../components/Input/Input'
 import updateObject from '../../../utils/updateObject'
+import { Redirect } from 'react-router-dom'
 
 // date picker
 import moment from 'moment'
@@ -180,6 +181,14 @@ class EditItem extends Component {
     this.setState({ formValid: false })
   }
 
+  handleDelete = (event) => {
+    event.preventDefault()
+    if (window.confirm("Are you sure you wish to delete this item?")) {
+      this.props.deleteFridgeItem(this.props.match.params.id)
+      this.props.history.push("/")
+    }
+  }
+
   render() {
     const formElements = [];
     for (let key in this.state.formData) {
@@ -209,13 +218,19 @@ class EditItem extends Component {
     let content = this.props.loading ? "Loading..." : (
       <div>
         <h1>Edit Item</h1>
-        <form onSubmit={this.handleSubmit}>
+        <form>
           {message}
           {this.props.error ? null : form}
-          <button disabled={!this.state.formValid ? 'disabled' : null}>Edit Item</button>
+          <div className="aligned">
+            <button onClick={this.handleSubmit} disabled={!this.state.formValid ? 'disabled' : null}>Edit Item</button>
+            <button onClick={this.handleDelete}>Delete Item</button>
+          </div>
         </form>
       </div>
     )
+    if (this.props.deleted) {
+      content = <Redirect to="/" />
+    }
     return content
   }
 }
@@ -226,14 +241,16 @@ const mapStateToProps = state => {
     item: state.fridge.item,
     error: state.fridge.error,
     loading: state.fridge.loading,
-    added: state.fridge.added
+    added: state.fridge.added,
+    deleted: state.fridge.deleted
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
     fetchItem: itemId => dispatch(actions.fetchFridgeItemAsync(itemId)),
-    editFridgeItem: (itemId, itemData) => dispatch(actions.updateFridgeItemAsync(itemId, itemData))
+    editFridgeItem: (itemId, itemData) => dispatch(actions.updateFridgeItemAsync(itemId, itemData)),
+    deleteFridgeItem: itemId => dispatch(actions.deleteFridgeItemAsync(itemId))
   }
 }
 

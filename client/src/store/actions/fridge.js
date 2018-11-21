@@ -145,3 +145,41 @@ export const updateFridgeItemAsync = (itemId, newData) => {
     }
   }
 }
+
+// Deleting a Fridge Item
+
+const deleteFridgeItem = () => {
+  return {
+    type: AT.FRIDGE_DELETE_ITEM
+  }
+}
+
+const deleteFridgeItemSuccess = itemId => {
+  return {
+    type: AT.FRIDGE_DELETE_ITEM_SUCCESS,
+    itemId: itemId
+  }
+}
+
+const deleteFridgeItemError = error => {
+  return {
+    type: AT.FRIDGE_DELETE_ITEM_ERROR,
+    error: error
+  }
+}
+
+export const deleteFridgeItemAsync = itemId => {
+  return async dispatch => {
+    dispatch(deleteFridgeItem());
+    try {
+      const response = await axios.post('http://localhost:5000/api/fridge/delete/' + itemId)
+      if (response.data === 'NOT_FOUND') {
+        dispatch(deleteFridgeItemError('Item with requested ID was not found! - ' + itemId))
+      } else {
+        dispatch(deleteFridgeItemSuccess(itemId))
+      }
+    } catch (error) {
+      dispatch(deleteFridgeItemError(error))
+    }
+  }
+}
