@@ -17,7 +17,7 @@ router.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*")
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
   if (req.method === "OPTIONS") {
-    res.header("Access-Control-Allow-Methods", "PUT, POST, DELETE")
+    res.header("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE")
     return res.status(200).json({})
   }
   next();
@@ -28,7 +28,13 @@ const fridgeItems = require(fridgeItemsFile)
 
 // GET request for fridge items, will load hard coded JSON for now
 router.get('/fridge', (req, res) => {
-  res.json(fridgeItems)
+  fs.readFile(fridgeItemsFile, (error, data) => {
+    if (error) {
+      res.send('READING_ERROR')
+    } else {
+      res.json(fridgeItems)
+    }
+  })
 })
 
 // GET request for a specific fridge item

@@ -1,6 +1,8 @@
 import * as AT from '../actionTypes'
 import axios from 'axios'
 
+const API_URL = 'http://localhost:5000/api/fridge/'
+
 // Receiving all Fridge Items
 
 const fetchFridgeItems = () => {
@@ -27,10 +29,14 @@ export const fetchFridgeItemsAsync = () => {
   return async dispatch => {
     dispatch(fetchFridgeItems());
     try {
-      const response = await axios('http://localhost:5000/api/fridge')
-      dispatch(fetchFridgeItemsSuccess(response.data))
+      const response = await axios(API_URL)
+      if (response.data === 'READING_ERROR') {
+        dispatch(fetchFridgeItemsError(response.data))
+      } else {
+        dispatch(fetchFridgeItemsSuccess(response.data))
+      }
     } catch (error) {
-      dispatch(fetchFridgeItemsError(error))
+      dispatch(fetchFridgeItemsError(error.message))
     }
   }
 }
@@ -46,15 +52,15 @@ const addFridgeItems = () => {
 const addFridgeItemsSuccess = (item, response) => {
   return {
     type: AT.FRIDGE_ADD_ITEM_SUCCESS,
-    item: item,
-    response: response
+    item,
+    response
   }
 }
 
 const addFridgeItemsError = error => {
   return {
     type: AT.FRIDGE_ADD_ITEM_ERROR,
-    error: error
+    error
   }
 }
 
@@ -62,10 +68,14 @@ export const addFridgeItemsAsync = item => {
   return async dispatch => {
     dispatch(addFridgeItems());
     try {
-      const response = await axios.post('http://localhost:5000/api/fridge', item)
-      dispatch(addFridgeItemsSuccess(item, response.data))
+      const response = await axios.post(API_URL, item)
+      if (response.data === 'SUCCESS') {
+        dispatch(addFridgeItemsSuccess(item, response.data))
+      } else {
+        dispatch(addFridgeItemsError(response.data))
+      }
     } catch (error) {
-      dispatch(addFridgeItemsError(error))
+      dispatch(addFridgeItemsError(error.message))
     }
   }
 }
@@ -81,14 +91,14 @@ const fetchFridgeItem = () => {
 const fetchFridgeItemSuccess = item => {
   return {
     type: AT.FRIDGE_FETCH_ITEM_SUCCESS,
-    item: item
+    item
   }
 }
 
 const fetchFridgeItemError = error => {
   return {
     type: AT.FRIDGE_FETCH_ITEM_ERROR,
-    error: error
+    error
   }
 }
 
@@ -96,14 +106,14 @@ export const fetchFridgeItemAsync = itemId => {
   return async dispatch => {
     dispatch(fetchFridgeItem());
     try {
-      const response = await axios.get('http://localhost:5000/api/fridge/' + itemId)
-      if (response.data === 'NOT_FOUND') {
-        dispatch(fetchFridgeItemError('Item with requested ID was not found!'))
-      } else {
+      const response = await axios.get(API_URL + itemId)
+      if (typeof response.data === 'object') {
         dispatch(fetchFridgeItemSuccess(response.data))
+      } else {
+        dispatch(fetchFridgeItemError(response.data))
       }
     } catch (error) {
-      dispatch(fetchFridgeItemError(error))
+      dispatch(fetchFridgeItemError(error.message))
     }
   }
 }
@@ -119,14 +129,14 @@ const updateFridgeItem = () => {
 const updateFridgeItemSuccess = item => {
   return {
     type: AT.FRIDGE_UPDATE_ITEM_SUCCESS,
-    item: item
+    item
   }
 }
 
 const updateFridgeItemError = error => {
   return {
     type: AT.FRIDGE_UPDATE_ITEM_ERROR,
-    error: error
+    error
   }
 }
 
@@ -134,14 +144,14 @@ export const updateFridgeItemAsync = (itemId, newData) => {
   return async dispatch => {
     dispatch(updateFridgeItem());
     try {
-      const response = await axios.put('http://localhost:5000/api/fridge/' + itemId, newData)
-      if (response.data === 'NOT_FOUND') {
-        dispatch(updateFridgeItemError('Item with requested ID was not found! - ' + itemId))
-      } else {
+      const response = await axios.put(API_URL + itemId, newData)
+      if (response.data === 'SUCCESS') {
         dispatch(updateFridgeItemSuccess(newData))
+      } else {
+        dispatch(updateFridgeItemError(response.data))
       }
     } catch (error) {
-      dispatch(updateFridgeItemError(error))
+      dispatch(updateFridgeItemError(error.message))
     }
   }
 }
@@ -157,14 +167,14 @@ const deleteFridgeItem = () => {
 const deleteFridgeItemSuccess = itemId => {
   return {
     type: AT.FRIDGE_DELETE_ITEM_SUCCESS,
-    itemId: itemId
+    itemId
   }
 }
 
 const deleteFridgeItemError = error => {
   return {
     type: AT.FRIDGE_DELETE_ITEM_ERROR,
-    error: error
+    error
   }
 }
 
@@ -172,14 +182,14 @@ export const deleteFridgeItemAsync = itemId => {
   return async dispatch => {
     dispatch(deleteFridgeItem());
     try {
-      const response = await axios.post('http://localhost:5000/api/fridge/delete/' + itemId)
-      if (response.data === 'NOT_FOUND') {
-        dispatch(deleteFridgeItemError('Item with requested ID was not found! - ' + itemId))
-      } else {
+      const response = await axios.post(API_URL + 'delete/' + itemId)
+      if (response.data === 'SUCCESS') {
         dispatch(deleteFridgeItemSuccess(itemId))
+      } else {
+        dispatch(deleteFridgeItemError(response.data))
       }
     } catch (error) {
-      dispatch(deleteFridgeItemError(error))
+      dispatch(deleteFridgeItemError(error.message))
     }
   }
 }

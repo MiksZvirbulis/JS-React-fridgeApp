@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import Input from '../../../components/Input/Input'
 import updateObject from '../../../utils/updateObject'
 import { Redirect } from 'react-router-dom'
+import errorHandler from '../../../utils/errorHandler'
 
 // date picker
 import moment from 'moment'
@@ -179,13 +180,13 @@ class AddItem extends Component {
         />
     ))
     let renderForm = ''
-    if(this.props.added) {
+    if (this.props.added) {
       renderForm = <Redirect to="/" />
     } else {
       renderForm = (
         <div>
           <h1>Add Item</h1>
-          {this.props.error ? <h1>Error: {this.props.error}</h1> : null}
+          {this.props.error ? <div id="error">{errorHandler(this.props.error)}</div> : null}
           <form onSubmit={this.handleSubmit}>
             {form}
             <button disabled={!this.state.formValid ? 'disabled' : null}>Add Item</button>

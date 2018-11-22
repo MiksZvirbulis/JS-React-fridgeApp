@@ -18,7 +18,7 @@ class Fridge extends Component {
     return (
       <div className="Fridge">
         <h1>Fridge Items</h1>
-        <FridgeItems items={this.props.items} />
+        {this.props.loading ? <div className="Loader"></div> : <FridgeItems items={this.props.items} />}
       </div>
     )
   }
@@ -26,7 +26,8 @@ class Fridge extends Component {
 
 const mapStateToProps = state => {
   return {
-    items: state.fridge.items
+    items: state.fridge.items,
+    loading: state.fridge.loading
   }
 }
 

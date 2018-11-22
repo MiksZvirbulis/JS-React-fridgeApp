@@ -1,7 +1,7 @@
 import React from 'react'
 import './FridgeItem.css'
-import moment from 'moment'
 import { Link } from 'react-router-dom'
+import transformExpiry from '../../../utils/transformExpiry'
 
 const fridgeItem = (props) => {
   let itemImage = ""
@@ -11,6 +11,8 @@ const fridgeItem = (props) => {
     itemImage = require(`../../../assets/icons/default.png`)
   }
 
+  const expiry = transformExpiry(props.expiring)
+
   return (
     <Link to={"edit/" + props.id}>
       <div className="FridgeItem">
@@ -19,13 +21,13 @@ const fridgeItem = (props) => {
         <span className="ItemDescription">
           <b>Item:</b> {props.name}<br />
           <b>Comment:</b> {props.comment}<br />
-          <b>Expiring:</b> {moment(props.expiring).format('DD/MM/YYYY')}<br />
           <b>Open:</b> {props.open === 'true' ? "Yes" : "No"}<br />
-          <b>Weight Left:</b> {props.weight}
-          </span>
-        </div>
-      </Link>
-    )
-  }
+          <b>Weight Left:</b> {props.weight}<br />
+          <b className={expiry.className}>{expiry.format} ({expiry.date})</b>
+        </span>
+      </div>
+    </Link>
+  )
+}
 
-  export default fridgeItem
+export default fridgeItem

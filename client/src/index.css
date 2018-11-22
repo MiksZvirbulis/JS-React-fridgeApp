@@ -10,6 +10,18 @@ body {
   color: #666;
 }
 
+b.Success {
+  color: green;
+}
+
+b.Error {
+  color: red;
+}
+
+b.Neutral {
+  color: orange;
+}
+
 form {
   width: 100%;
   margin: 10px;
@@ -89,19 +101,86 @@ button:hover {
   background-color: #228535;
 }
 
+button.Error {
+  background-color: #d8000c;
+}
+
+button.Error:hover {
+  background-color: #dc3545;
+}
+
 button:disabled {
   background-color: #ccc;
   color: #666666;
   cursor: not-allowed;
 }
 
+.Loader,
+.Loader:before,
+.Loader:after {
+  border-radius: 50%;
+  width: 2.5em;
+  height: 2.5em;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+  -webkit-animation: load7 1.8s infinite ease-in-out;
+  animation: load7 1.8s infinite ease-in-out;
+}
+.Loader {
+  color: #32c24d;
+  font-size: 10px;
+  margin: 0 auto 40px auto;
+  position: relative;
+  text-indent: -9999em;
+  -webkit-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-animation-delay: -0.16s;
+  animation-delay: -0.16s;
+}
+.Loader:before,
+.Loader:after {
+  content: '';
+  position: absolute;
+  top: 0;
+}
+.Loader:before {
+  left: -3.5em;
+  -webkit-animation-delay: -0.32s;
+  animation-delay: -0.32s;
+}
+.Loader:after {
+  left: 3.5em;
+}
+@-webkit-keyframes load7 {
+  0%,
+  80%,
+  100% {
+    box-shadow: 0 2.5em 0 -1.3em;
+  }
+  40% {
+    box-shadow: 0 2.5em 0 0;
+  }
+}
+@keyframes load7 {
+  0%,
+  80%,
+  100% {
+    box-shadow: 0 2.5em 0 -1.3em;
+  }
+  40% {
+    box-shadow: 0 2.5em 0 0;
+  }
+}
+
+
 #error {
   display: block;
   border-radius: 2px;
   padding: 5px;
   margin: 10px;
-  color: #D8000C;
-  background-color: #FFBABA;
+  color: #d8000c;
+  background-color: #ffbaba;
 }
 
 #success {
@@ -109,8 +188,8 @@ button:disabled {
   border-radius: 2px;
   padding: 5px;
   margin: 10px;
-  color: #4F8A10;
-  background-color: #DFF2BF;
+  color: #4f8a10;
+  background-color: #dff2bf;
 }
 
 /* Overwriting default DatePicker Styles */

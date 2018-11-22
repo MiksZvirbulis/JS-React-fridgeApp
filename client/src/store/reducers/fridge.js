@@ -46,7 +46,7 @@ export default function fridge(state = initialState, action) {
     case AT.FRIDGE_ADD_ITEM_ERROR:
     return updateObject(state, { loading: false, error: action.error, added: false })
     case AT.FRIDGE_FETCH_ITEM:
-    return updateObject(state, { loading: true, item: [], error: null } )
+    return updateObject(state, { loading: true, item: [], error: null, added: false } )
     case AT.FRIDGE_FETCH_ITEM_SUCCESS:
     return updateObject(state, { loading: false, item: action.item })
     case AT.FRIDGE_FETCH_ITEM_ERROR:

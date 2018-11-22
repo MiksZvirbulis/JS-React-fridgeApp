@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import Input from '../../../components/Input/Input'
 import updateObject from '../../../utils/updateObject'
 import { Redirect } from 'react-router-dom'
+import errorHandler from '../../../utils/errorHandler'
 
 // date picker
 import moment from 'moment'
@@ -101,7 +102,8 @@ class EditItem extends Component {
         value: ''
       }
     },
-    formValid: false
+    formValid: false,
+    deleted: false
   }
 
   componentDidMount() {
@@ -116,7 +118,7 @@ class EditItem extends Component {
           let newValue = key === 'expiryDate' ? moment(this.props.item[key]) : this.props.item[key]
           const updatedElement = updateObject(element, { value: newValue } )
           const updatedForm = updateObject(this.state.formData, { [key]: updatedElement })
-          this.setState({ formData: updatedForm })
+          this.setState({ formData: updatedForm, deleted: false })
         }
       }
     })
@@ -185,7 +187,7 @@ class EditItem extends Component {
     event.preventDefault()
     if (window.confirm("Are you sure you wish to delete this item?")) {
       this.props.deleteFridgeItem(this.props.match.params.id)
-      this.props.history.push("/")
+      this.setState({ deleted: true })
     }
   }
 
@@ -210,12 +212,12 @@ class EditItem extends Component {
     ))
     let message = ''
     if (this.props.error) {
-      message = <div id="error">{this.props.error.message}</div>
+      message = <div id="error">{errorHandler(this.props.error)}</div>
     }
     if (this.props.added) {
       message = <div id="success">Item was successfully updated!</div>
     }
-    let content = this.props.loading ? "Loading..." : (
+    let content = this.props.loading ? <div className="Loader"></div> : (
       <div>
         <h1>Edit Item</h1>
         <form>
@@ -223,12 +225,12 @@ class EditItem extends Component {
           {this.props.error ? null : form}
           <div className="aligned">
             <button onClick={this.handleSubmit} disabled={!this.state.formValid ? 'disabled' : null}>Edit Item</button>
-            <button onClick={this.handleDelete}>Delete Item</button>
+            <button onClick={this.handleDelete} className="Error">Delete Item</button>
           </div>
         </form>
       </div>
     )
-    if (this.props.deleted) {
+    if (this.state.deleted) {
       content = <Redirect to="/" />
     }
     return content

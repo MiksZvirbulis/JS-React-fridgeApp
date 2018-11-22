@@ -5,4 +5,4 @@ const updateObject = (object, updatedProperties) => {
   }
 }
 
-export default updateObject;
+export default updateObject

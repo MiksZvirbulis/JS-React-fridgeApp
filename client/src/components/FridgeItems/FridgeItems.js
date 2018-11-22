@@ -2,6 +2,7 @@
 import React, { Component } from 'react'
 import FridgeItem from './FridgeItem/FridgeItem'
 import './FridgeItems.css'
+import errorHandler from '../../utils/errorHandler'
 
 // redux
 import { connect } from 'react-redux'
@@ -10,7 +11,7 @@ class FridgeItems extends Component {
   render() {
     let items = ''
     if (this.props.error) {
-      items = `${this.props.error.name}: ${this.props.error.message}`
+      items = <div id="error">{errorHandler(this.props.error)}</div>
     } else {
       items = this.props.items.map(item => {
         return <FridgeItem
