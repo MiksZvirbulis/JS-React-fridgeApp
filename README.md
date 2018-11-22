@@ -21,6 +21,17 @@ Mainly and most importantly - reduce food waste. However, it may also be for mon
 * HTML
 * CSS
 
+## Screenshots
+https://prntscr.com/llsjaj
+https://prntscr.com/llsj7v
+https://prntscr.com/llsiz5
+https://prntscr.com/llsivv
+https://prntscr.com/llsio2
+https://prntscr.com/llsinz
+https://prntscr.com/llsiny
+https://prntscr.com/llsinx
+https://prntscr.com/llsint
+
 ## Coming Soon
 * Extra security - server side data validation
 * Fridge item sorting and filtering
