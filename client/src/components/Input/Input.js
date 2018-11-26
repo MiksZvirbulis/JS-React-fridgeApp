@@ -3,14 +3,14 @@ import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 
 const Input = (props) => {
-  let formElement = ""
+  let formElement = null
   switch(props.elementType) {
     case 'input':
     formElement = <input className={!props.valid ? "invalid" : null} value={props.value} onChange={props.changed} {...props.elementConfig} />
     break;
     case 'select':
     formElement = (
-      <select defaultValue={props.value != null ? props.value : "disabled"} onChange={props.changed} className={!props.valid ? "invalid" : null}>
+      <select value={props.value != null ? props.value : "disabled"} onChange={props.changed} className={!props.valid ? "invalid" : null}>
         <option value="disabled" disabled>{props.elementConfig.placeholder}</option>
         {props.elementConfig.options.map(option => (
           <option key={option.value} value={option.value}>{option.display}</option>

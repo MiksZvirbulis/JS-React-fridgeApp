@@ -168,18 +168,17 @@ class EditItem extends Component {
     const item = {}
     for (let key in this.state.formData) {
       let value = ''
-      if(this.state.formData[key].elementType === 'datePicker') {
+      if (this.state.formData[key].elementType === 'datePicker') {
         value = this.state.formData[key].value._d
       } else {
         value = this.state.formData[key].value
       }
-      item[key] = value
+      item[key] = {
+        validation: this.state.formData[key].validation,
+        value
+      }
     }
-    const itemData = {
-      id: this.props.match.params.id,
-      ...item
-    }
-    this.props.editFridgeItem(this.props.match.params.id, itemData)
+    this.props.editFridgeItem(this.props.match.params.id, { ...item })
     this.setState({ formValid: false })
   }
 
@@ -197,7 +196,7 @@ class EditItem extends Component {
       formElements.push({
         id: key,
         config: this.state.formData[key]
-      });
+      })
     }
 
     const form = formElements.map(element => (
@@ -225,7 +224,7 @@ class EditItem extends Component {
           {this.props.error ? null : form}
           <div className="aligned">
             <button onClick={this.handleSubmit} disabled={!this.state.formValid ? 'disabled' : null}>Edit Item</button>
-            <button onClick={this.handleDelete} className="Error">Delete Item</button>
+            <button onClick={this.handleDelete} className="Error">Remove Item</button>
           </div>
         </form>
       </div>

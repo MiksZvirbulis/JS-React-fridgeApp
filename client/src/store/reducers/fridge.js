@@ -13,14 +13,22 @@ const initialState = {
 
 function addItemSuccess(state, item) {
   const items = [...state.items]
-  items.push(item)
+  const newItem = {}
+  for (let key in item) {
+    newItem[key] = item[key].value
+  }
+  items.push(newItem)
   return updateObject(state, { loading: false, item: item, items: items, added: true })
 }
 
-function updateItemSuccess(state, item) {
+function updateItemSuccess(state, itemId, item) {
   const items = [...state.items]
-  const itemIndex = items.findIndex(it => it.id === item.id)
-  items[itemIndex] = item
+  const itemIndex = items.findIndex(it => it.id === itemId)
+  const editedItem = { id: itemId }
+  for (let key in item) {
+    editedItem[key] = item[key].value
+  }
+  items[itemIndex] = editedItem
   return updateObject(state, { loading: false, item: item, items: items, added: true })
 }
 
@@ -54,7 +62,7 @@ export default function fridge(state = initialState, action) {
     case AT.FRIDGE_UPDATE_ITEM:
     return updateObject(state, { loading: true, item: [], added: false, error: null } )
     case AT.FRIDGE_UPDATE_ITEM_SUCCESS:
-    return updateItemSuccess(state, action.item)
+    return updateItemSuccess(state, action.itemId, action.item)
     case AT.FRIDGE_UPDATE_ITEM_ERROR:
     return updateObject(state, { loading: false, error: action.error, added: false })
     case AT.FRIDGE_DELETE_ITEM:

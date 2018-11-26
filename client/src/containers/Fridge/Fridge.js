@@ -9,15 +9,12 @@ import * as actions from '../../store/actions/'
 
 class Fridge extends Component {
   componentDidMount() {
-    if (this.props.items.length <= 0) {
-      this.props.fetchItems()
-    }
+    this.props.fetchItems(this.props.items)
   }
 
   render() {
     return (
       <div className="Fridge">
-        <h1>Fridge Items</h1>
         {this.props.loading ? <div className="Loader"></div> : <FridgeItems items={this.props.items} />}
       </div>
     )
@@ -33,7 +30,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    fetchItems: () => dispatch(actions.fetchFridgeItemsAsync())
+    fetchItems: (loadedItems) => dispatch(actions.fetchFridgeItemsAsync(loadedItems))
   }
 }
 

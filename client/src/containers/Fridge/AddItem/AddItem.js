@@ -151,10 +151,13 @@ class AddItem extends Component {
       } else {
         value = this.state.formData[key].value
       }
-      item[key] = value
+      item[key] = {
+        validation: this.state.formData[key].validation,
+        value
+      }
     }
     const itemData = {
-      id: moment(),
+      id: { value: moment() },
       ...item
     }
     this.props.addFridgeItem(itemData)

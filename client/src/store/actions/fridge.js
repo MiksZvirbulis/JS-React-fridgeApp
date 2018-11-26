@@ -25,18 +25,22 @@ const fetchFridgeItemsError = error => {
   }
 }
 
-export const fetchFridgeItemsAsync = () => {
+export const fetchFridgeItemsAsync = loadedItems => {
   return async dispatch => {
     dispatch(fetchFridgeItems());
-    try {
-      const response = await axios(API_URL)
-      if (response.data === 'READING_ERROR') {
-        dispatch(fetchFridgeItemsError(response.data))
-      } else {
-        dispatch(fetchFridgeItemsSuccess(response.data))
+    if (loadedItems.length <= 0) {
+      try {
+        const response = await axios(API_URL)
+        if (response.data === 'READING_ERROR') {
+          dispatch(fetchFridgeItemsError(response.data))
+        } else {
+          dispatch(fetchFridgeItemsSuccess(response.data))
+        }
+      } catch (error) {
+        dispatch(fetchFridgeItemsError(error.message))
       }
-    } catch (error) {
-      dispatch(fetchFridgeItemsError(error.message))
+    } else {
+      dispatch(fetchFridgeItemsSuccess(loadedItems))
     }
   }
 }
@@ -126,9 +130,10 @@ const updateFridgeItem = () => {
   }
 }
 
-const updateFridgeItemSuccess = item => {
+const updateFridgeItemSuccess = (itemId, item) => {
   return {
     type: AT.FRIDGE_UPDATE_ITEM_SUCCESS,
+    itemId,
     item
   }
 }
@@ -146,7 +151,7 @@ export const updateFridgeItemAsync = (itemId, newData) => {
     try {
       const response = await axios.put(API_URL + itemId, newData)
       if (response.data === 'SUCCESS') {
-        dispatch(updateFridgeItemSuccess(newData))
+        dispatch(updateFridgeItemSuccess(itemId, newData))
       } else {
         dispatch(updateFridgeItemError(response.data))
       }

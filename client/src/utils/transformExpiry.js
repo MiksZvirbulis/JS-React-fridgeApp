@@ -2,9 +2,9 @@ import moment from 'moment'
 
 const transformExpiry = expiryDate => {
   let expiry = {}
-  const now = moment()
+  const now = moment(moment()._d)
   expiryDate = moment(expiryDate)
-  const dayDifference = expiryDate.diff(now, 'days')
+  const dayDifference = expiryDate.diff(now, 'days') + 1
 
   if (!moment(expiryDate).isValid()) {
     return 'Date is not valid'

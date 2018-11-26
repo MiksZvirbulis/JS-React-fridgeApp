@@ -9,6 +9,9 @@ const fridgeItemsFile = './fridgeItems.json'
 // Require fileSystem to be able to work with JSON files
 const fs = require('fs')
 
+// Requiring data validation function
+const dataValidation = require('./dataValidation')
+
 // Setting /api as the default route for API requests, Body Parser & settings headers for a RestAPI
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
@@ -54,7 +57,7 @@ router.get('/fridge/:id', (req, res) => {
   })
 })
 
-// PUT request for a specific fridge item
+// PUT request to update a specific fridge item
 router.put('/fridge/:id', (req, res) => {
   fs.readFile(fridgeItemsFile, (error, data) => {
     if (error) {
@@ -64,7 +67,48 @@ router.put('/fridge/:id', (req, res) => {
       const fridgeItem = fridgeItems.find(item => item.id === req.params.id)
       if (fridgeItem) {
         const fridgeItemIndex = fridgeItems.findIndex(item => item.id === req.params.id)
-        fridgeItems[fridgeItemIndex] = { ...fridgeItem, ...req.body }
+        const receivedItem = { ...req.body }
+        let itemValid = true
+        const editedItem = {}
+        for (let key in receivedItem) {
+          itemValid = dataValidation.check(receivedItem[key].value, receivedItem[key].validation)
+          editedItem[key] = receivedItem[key].value
+        }
+        if (itemValid) {
+          fridgeItems[fridgeItemIndex] = { ...fridgeItem, ...editedItem }
+          fs.writeFile(fridgeItemsFile, JSON.stringify(fridgeItems), err => {
+            if (err) {
+              res.send('WRITING_ERROR')
+            } else {
+              res.send('SUCCESS')
+            }
+          })
+        } else {
+          res.send('INVALID_DATA')
+        }
+      } else {
+        res.send('NOT_FOUND')
+      }
+    }
+  })
+})
+
+// POST request to add a new fridge item, will add to JSON file for now
+router.post('/fridge', (req, res) => {
+  fs.readFile(fridgeItemsFile, (error, data) => {
+    if (error) {
+      res.send('READING_ERROR')
+    } else {
+      const receivedItem = { ...req.body }
+      let itemValid = true
+      const newItem = {}
+      for (let key in receivedItem) {
+        itemValid = (key === "id") ? true : dataValidation.check(receivedItem[key].value, receivedItem[key].validation)
+        newItem[key] = receivedItem[key].value
+      }
+      if (itemValid) {
+        const fridgeItems = JSON.parse(data)
+        fridgeItems.push(newItem)
         fs.writeFile(fridgeItemsFile, JSON.stringify(fridgeItems), err => {
           if (err) {
             res.send('WRITING_ERROR')
@@ -73,13 +117,13 @@ router.put('/fridge/:id', (req, res) => {
           }
         })
       } else {
-        res.send('NOT_FOUND')
+        res.send('INVALID_DATA')
       }
     }
   })
 })
 
-// POST request for the deletion of a specific fridge item
+// POST request to delete a specific fridge item
 router.post('/fridge/delete/:id', (req, res) => {
   fs.readFile(fridgeItemsFile, (error, data) => {
     if (error) {
@@ -102,30 +146,6 @@ router.post('/fridge/delete/:id', (req, res) => {
       }
     }
   })
-})
-
-// POST request to add a new fridge item, will add to JSON file for now
-router.post('/fridge', (req, res) => {
-  fs.readFile(fridgeItemsFile, (error, data) => {
-    if (error) {
-      res.send('READING_ERROR')
-    } else {
-      const fridgeItems = JSON.parse(data)
-      fridgeItems.push(req.body)
-      fs.writeFile(fridgeItemsFile, JSON.stringify(fridgeItems), err => {
-        if (err) {
-          res.send('WRITING_ERROR')
-        } else {
-          res.send('SUCCESS')
-        }
-      })
-    }
-  })
-})
-
-// PUT request to update an existing fridge item, will update to JSON file for now
-router.put('/fridge', (req, res) => {
-  res.send("A request to update an existing item")
 })
 
 app.listen(port, () => console.log(`Server listening on port ${port}`))

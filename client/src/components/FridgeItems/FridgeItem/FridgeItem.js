@@ -19,11 +19,13 @@ const fridgeItem = (props) => {
         <img src={itemImage} alt={itemImage} />
         <span className="ItemName">{props.name}</span>
         <span className="ItemDescription">
-          <b>Item:</b> {props.name}<br />
-          <b>Comment:</b> {props.comment}<br />
-          <b>Open:</b> {props.open === 'true' ? "Yes" : "No"}<br />
-          <b>Weight Left:</b> {props.weight}<br />
-          <b className={expiry.className}>{expiry.format} ({expiry.date})</b>
+          <center>
+            <b>{props.name}</b><br />
+            {props.comment} <br /><br />
+            <b>Is it open?</b> {props.open === 'true' ? "Yes" : "No"}<br />
+            <b>Weight/Quantity Left</b> {props.weight}<br />
+            <b className={expiry.className}>{expiry.format} ({expiry.date})</b>
+          </center>
         </span>
       </div>
     </Link>
