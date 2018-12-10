@@ -2,7 +2,7 @@ import moment from 'moment'
 
 const transformExpiry = expiryDate => {
   let expiry = {}
-  const now = moment(moment()._d)
+  const now = moment()
   expiryDate = moment(expiryDate)
   const dayDifference = expiryDate.diff(now, 'days') + 1
 

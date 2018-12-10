@@ -3,17 +3,26 @@ import React, { Component } from 'react'
 import FridgeItem from './FridgeItem/FridgeItem'
 import './FridgeItems.css'
 import errorHandler from '../../utils/errorHandler'
+import * as actions from '../../store/actions'
 
 // redux
 import { connect } from 'react-redux'
 
 class FridgeItems extends Component {
+  handleSearch = event => {
+    this.props.fetchItems(this.props.items, event.target.value)
+  }
+
   render() {
     let items = ''
     if (this.props.error) {
       items = <div id="error">{errorHandler(this.props.error)}</div>
     } else {
-      items = this.props.items.map(item => {
+      let loadedItems = this.props.items
+      if (this.props.foundItems.length > 0) {
+        loadedItems = this.props.foundItems
+      }
+      items = loadedItems.map(item => {
         return <FridgeItem
           key={item.id}
           id={item.id}
@@ -27,6 +36,9 @@ class FridgeItems extends Component {
     }
     return (
       <div className="FridgeItems">
+        <div className="Search">
+          <input type="text" onChange={this.handleSearch} placeholder="Search for ingredient..." />
+        </div>
         {items}
       </div>
     )
@@ -35,8 +47,16 @@ class FridgeItems extends Component {
 
 const mapStateToProps = state => {
   return {
+    items: state.fridge.items,
+    foundItems: state.fridge.foundItems,
     error: state.fridge.error
   }
 }
 
-export default connect(mapStateToProps)(FridgeItems)
+const mapDispatchToProps = dispatch => {
+  return {
+    fetchItems: (loadedItems, search) => dispatch(actions.fetchFridgeItemsAsync(loadedItems, search))
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(FridgeItems)

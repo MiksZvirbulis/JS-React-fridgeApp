@@ -3,6 +3,7 @@ import updateObject from '../../utils/updateObject'
 
 const initialState = {
   items: [],
+  foundItems: [],
   item: [],
   loading: false,
   error: false,
@@ -42,9 +43,9 @@ function deleteItemSuccess(state, itemId) {
 export default function fridge(state = initialState, action) {
   switch(action.type) {
     case AT.FRIDGE_FETCH_ITEMS:
-    return updateObject(state, { loading: true, added: false, error: null } )
+    return updateObject(state, { loading: true, added: false, error: null, foundItems: [] } )
     case AT.FRIDGE_FETCH_ITEMS_SUCCESS:
-    return updateObject(state, { loading: false, items: action.items })
+    return updateObject(state, { loading: false, items: action.items, foundItems: action.foundItems })
     case AT.FRIDGE_FETCH_ITEMS_ERROR:
     return updateObject(state, { loading: false, error: action.error })
     case AT.FRIDGE_ADD_ITEM:

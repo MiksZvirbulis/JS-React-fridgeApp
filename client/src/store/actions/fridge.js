@@ -11,9 +11,18 @@ const fetchFridgeItems = () => {
   }
 }
 
-const fetchFridgeItemsSuccess = items => {
+const fetchFridgeItemsSuccess = (items, search) => {
+  let foundItems = []
+  if (search) {
+    const loadedItems = [...items]
+
+    foundItems = loadedItems.filter(el => {
+      return el.name.toLowerCase().indexOf(search.toLowerCase()) > -1
+    })
+  }
   return {
     type: AT.FRIDGE_FETCH_ITEMS_SUCCESS,
+    foundItems,
     items
   }
 }
@@ -25,7 +34,7 @@ const fetchFridgeItemsError = error => {
   }
 }
 
-export const fetchFridgeItemsAsync = loadedItems => {
+export const fetchFridgeItemsAsync = (loadedItems, search = false) => {
   return async dispatch => {
     dispatch(fetchFridgeItems());
     if (loadedItems.length <= 0) {
@@ -34,13 +43,13 @@ export const fetchFridgeItemsAsync = loadedItems => {
         if (response.data === 'READING_ERROR') {
           dispatch(fetchFridgeItemsError(response.data))
         } else {
-          dispatch(fetchFridgeItemsSuccess(response.data))
+          dispatch(fetchFridgeItemsSuccess(response.data, search))
         }
       } catch (error) {
         dispatch(fetchFridgeItemsError(error.message))
       }
     } else {
-      dispatch(fetchFridgeItemsSuccess(loadedItems))
+      dispatch(fetchFridgeItemsSuccess(loadedItems, search))
     }
   }
 }

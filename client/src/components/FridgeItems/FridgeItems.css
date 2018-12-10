@@ -11,3 +11,8 @@
   text-decoration: none;
   color: #fff;
 }
+
+.FridgeItems .Search {
+  display: block;
+  width: 100%;
+}
