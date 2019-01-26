@@ -14,7 +14,8 @@ Mainly and most importantly - reduce food waste. However, it may also be for mon
 * Delete ingredients
 * Responsive Design
 
-## Calligraphy Used
+## Languages Used
+* English
 * JavaScript
     * React
     * Express
