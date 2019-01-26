@@ -157,7 +157,6 @@ class AddItem extends Component {
       }
     }
     const itemData = {
-      id: { value: moment() },
       ...item
     }
     this.props.addFridgeItem(itemData)

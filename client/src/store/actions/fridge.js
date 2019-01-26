@@ -62,11 +62,11 @@ const addFridgeItems = () => {
   }
 }
 
-const addFridgeItemsSuccess = (item, response) => {
+const addFridgeItemsSuccess = (item, itemId) => {
   return {
     type: AT.FRIDGE_ADD_ITEM_SUCCESS,
     item,
-    response
+    itemId
   }
 }
 
@@ -82,8 +82,9 @@ export const addFridgeItemsAsync = item => {
     dispatch(addFridgeItems());
     try {
       const response = await axios.post(API_URL, item)
-      if (response.data === 'SUCCESS') {
-        dispatch(addFridgeItemsSuccess(item, response.data))
+      console.log(response.data)
+      if (typeof response.data === 'object' && response.data !== null) {
+        dispatch(addFridgeItemsSuccess(item, response.data.itemId))
       } else {
         dispatch(addFridgeItemsError(response.data))
       }

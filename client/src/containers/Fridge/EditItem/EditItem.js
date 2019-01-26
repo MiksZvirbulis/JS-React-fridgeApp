@@ -199,7 +199,7 @@ class EditItem extends Component {
       })
     }
 
-    const form = formElements.map(element => (
+    const renderElements = formElements.map(element => (
       <Input
         key={element.id}
         elementType={element.config.elementType}
@@ -209,6 +209,15 @@ class EditItem extends Component {
         changed={(event) => this.handleChange(event, element.id)}
         />
     ))
+    const form = (
+      <div>
+        {renderElements}
+      <div className="aligned">
+            <button onClick={this.handleSubmit} disabled={!this.state.formValid ? 'disabled' : null}>Edit Item</button>
+            <button onClick={this.handleDelete} className="Error">Remove Item</button>
+          </div>
+      </div>
+    )
     let message = ''
     if (this.props.error) {
       message = <div id="error">{errorHandler(this.props.error)}</div>
@@ -222,10 +231,6 @@ class EditItem extends Component {
         <form>
           {message}
           {this.props.error ? null : form}
-          <div className="aligned">
-            <button onClick={this.handleSubmit} disabled={!this.state.formValid ? 'disabled' : null}>Edit Item</button>
-            <button onClick={this.handleDelete} className="Error">Remove Item</button>
-          </div>
         </form>
       </div>
     )

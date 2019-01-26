@@ -12,20 +12,21 @@ const initialState = {
   types: ['apricot','asparagus','avocado','bacon','baguette','banana','beetroot','brazil-nut','bread','broccoli','burger','cabbage','cake','candy','carrot','celery','cheese','chili-pepper','chocolate','cinnamon-sticks','coconut','corn','crab','crisps','croissant','dairy','dessert','dragon-fruit','eggplant','eggs','finished-dish','finocchio','fish','flour','fries','grapes','hazelnut','hot-dog','ice-cream','jam','jamon','jelly','kebab','kiwi','kohlrabi','leek','lemon','lettuce','meat','melon','muffins','mushroom','naan','noodles','nuts','olive-oil','olives','onions','oranges','pancakes','papaya','pastry','peaches','pears','peas','peppers','pet-food','pie','pineapple','pizza','plum','pomegranate','porridge','potato','prawns','pretzel','pumpkin','quesadilla','radish','raspberry','rice','salami','sauce','snacks','spaghetti','spices','spinach','sprout','steak','strawberry','sweet-potato','sweetener','taco','tin-food','tomato','watermelon','wrap','zucchini']
 }
 
-function addItemSuccess(state, item) {
+function addItemSuccess(state, item, itemId) {
   const items = [...state.items]
   const newItem = {}
   for (let key in item) {
     newItem[key] = item[key].value
   }
+  newItem['id'] = itemId
   items.push(newItem)
   return updateObject(state, { loading: false, item: item, items: items, added: true })
 }
 
 function updateItemSuccess(state, itemId, item) {
   const items = [...state.items]
-  const itemIndex = items.findIndex(it => it.id === itemId)
-  const editedItem = { id: itemId }
+  const itemIndex = items.findIndex(it => it.id === parseInt(itemId))
+  const editedItem = { id: parseInt(itemId) }
   for (let key in item) {
     editedItem[key] = item[key].value
   }
@@ -35,7 +36,7 @@ function updateItemSuccess(state, itemId, item) {
 
 function deleteItemSuccess(state, itemId) {
   const items = [...state.items]
-  const itemIndex = items.findIndex(it => it.id === itemId)
+  const itemIndex = items.findIndex(it => it.id === parseInt(itemId))
   items.splice(itemIndex, 1)
   return updateObject(state, { loading: false, items: items, deleted: true })
 }
@@ -51,7 +52,7 @@ export default function fridge(state = initialState, action) {
     case AT.FRIDGE_ADD_ITEM:
     return updateObject(state, { loading: true, added: false, error: null } )
     case AT.FRIDGE_ADD_ITEM_SUCCESS:
-    return addItemSuccess(state, action.item)
+    return addItemSuccess(state, action.item, action.itemId)
     case AT.FRIDGE_ADD_ITEM_ERROR:
     return updateObject(state, { loading: false, error: action.error, added: false })
     case AT.FRIDGE_FETCH_ITEM:
