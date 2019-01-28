@@ -4,7 +4,6 @@ const app = express()
 const router = express.Router()
 const port = 5000
 const bodyParser = require('body-parser')
-const fridgeItemsFile = './fridgeItems.json'
 
 // Database
 let mysql = require('mysql')
@@ -16,9 +15,6 @@ let connection = mysql.createConnection({
 })
 
 connection.connect()
-
-// Require fileSystem to be able to work with JSON files
-const fs = require('fs')
 
 // Requiring data validation function
 const dataValidation = require('./dataValidation')
@@ -39,15 +35,15 @@ router.use((req, res, next) => {
   next();
 });
 
-// Requiring fridge item JSON file
-const fridgeItems = require(fridgeItemsFile)
-
 // GET request for fridge items
 router.get('/fridge', (req, res) => {
+  // Query for all items
   connection.query('SELECT * FROM `items`', (error, items) => {
     if (error) {
+      // Send for error handling if query failed
       res.send('READING_ERROR')
     } else {
+      // Send JSON with query results
       res.json(items)
     }
   })
@@ -55,13 +51,18 @@ router.get('/fridge', (req, res) => {
 
 // GET request for a specific fridge item
 router.get('/fridge/:id', (req, res) => {
+  // Query to select an item with ID attached to request
   connection.query('SELECT * FROM `items` WHERE `id` = ?', [req.params.id], (error, item) => {
     if (error) {
+      // Send for error handling if query failed
       res.send('READING_ERROR')
     } else {
+      // Check if item was found in database
       if (item.length === 0) {
+        // Send for error handling if item was not found in database
         res.send('NOT_FOUND')
       } else {
+        // Receive item from database and send back as JSON
         res.json(item[0])
       }
     }
@@ -70,21 +71,31 @@ router.get('/fridge/:id', (req, res) => {
 
 // PUT request to update a specific fridge item
 router.put('/fridge/:id', (req, res) => {
+  // Query to select an item with ID attached to request
   connection.query('SELECT * FROM `items` WHERE `id` = ?', [req.params.id], (error, item) => {
     if (error) {
+      // Send for error handling if query failed
       res.send('READING_ERROR')
     } else {
+      // Check if item was found in database
       if (item.length === 0) {
+        // Send for error handling if item was not found in database
         res.send('NOT_FOUND')
       } else {
-        const receivedItem = { ...req.body }
+        // Check validation of item received in the body of the request
+        const receivedItem = { ...req.body
+        }
+        // Initially valid
         let itemValid = true
         const editedItem = {}
         for (let key in receivedItem) {
+          // Each key is looped and tested for validation according to validation rules attached to request
           itemValid = dataValidation.check(receivedItem[key].value, receivedItem[key].validation)
           editedItem[key] = receivedItem[key].value
         }
+        // Check if itemValid = true
         if (itemValid) {
+          // Query to update the item values
           connection.query('UPDATE `items` SET `name` = ?, `weight` = ?, `type` = ?, `expiryDate` = ?, `comment` = ?, `open` = ? WHERE `id` = ?', [
             editedItem['name'],
             editedItem['weight'],
@@ -94,13 +105,16 @@ router.put('/fridge/:id', (req, res) => {
             editedItem['open'],
             req.params.id
           ], (error, item) => {
-            if(error) {
+            if (error) {
+              // Send for error handling if updating query was not successful
               res.send('WRITING_ERROR')
             } else {
+              // Send for SUCCESS as updating was successful
               res.send('SUCCESS')
             }
           })
         } else {
+          // Send for error handling if item values were not valid
           res.send('INVALID_DATA')
         }
       }
@@ -110,15 +124,19 @@ router.put('/fridge/:id', (req, res) => {
 
 // POST request to add a new fridge item
 router.post('/fridge', (req, res) => {
+  // Check validation of item received in the body of the request
   const receivedItem = { ...req.body
   }
   let itemValid = true
   const newItem = {}
   for (let key in receivedItem) {
+    // Each key is looped and tested for validation according to validation rules attached to request
     itemValid = (key === "id") ? true : dataValidation.check(receivedItem[key].value, receivedItem[key].validation)
     newItem[key] = receivedItem[key].value
   }
+  // Check if itemValid = true
   if (itemValid) {
+    // Query to insert the new item in the database
     connection.query('INSERT INTO `items` (`name`, `weight`, `type`, `expiryDate`, `comment`, `open`) VALUES (?, ?, ?, ?, ?, ?)', [
       newItem['name'],
       newItem['weight'],
@@ -128,31 +146,40 @@ router.post('/fridge', (req, res) => {
       newItem['open']
     ], (error, result) => {
       if (error) {
+        // Send for error handling if the insert query was not successful
         res.send('WRITING_ERROR')
       } else {
+        // Send JSON with itemId as query was successful
         res.json({
           itemId: result.insertId
         })
       }
     })
   } else {
+    // Send for error handling if item values were not valid
     res.send('INVALID_DATA')
   }
 })
 
 // POST request to delete a specific fridge item
 router.post('/fridge/delete/:id', (req, res) => {
+  // Query to select an item with ID attached to request
   connection.query('SELECT * FROM `items` WHERE `id` = ?', [req.params.id], (error, item) => {
     if (error) {
+      // Send for error handling if query failed
       res.send('READING_ERROR')
     } else {
       if (item.length === 0) {
+        // Send for error handling if item was not found in database
         res.send('NOT_FOUND')
       } else {
+        // Query to delete the item with the associated item ID
         connection.query('DELETE FROM `items` WHERE `id` = ?', [req.params.id], (error, item) => {
-          if(error) {
+          if (error) {
+            // Send for error handling if the delete query was not successful
             res.send('WRITING_ERROR')
           } else {
+            // Send for SUCCESS as deletion was successful
             res.send("SUCCESS")
           }
         })

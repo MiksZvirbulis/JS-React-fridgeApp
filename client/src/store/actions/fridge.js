@@ -1,5 +1,6 @@
 import * as AT from '../actionTypes'
 import axios from 'axios'
+import compareAndSort from '../../utils/compareAndSort'
 
 const API_URL = 'http://localhost:5000/api/fridge/'
 
@@ -11,15 +12,48 @@ const fetchFridgeItems = () => {
   }
 }
 
-const fetchFridgeItemsSuccess = (items, search) => {
+const fetchFridgeItemsSuccess = (items, oldFoundItems, action, actionValue) => {
+  let loadedItems = [...items]
   let foundItems = []
-  if (search) {
-    const loadedItems = [...items]
 
-    foundItems = loadedItems.filter(el => {
-      return el.name.toLowerCase().indexOf(search.toLowerCase()) > -1
-    })
+  if (oldFoundItems === undefined || oldFoundItems === null) {
+    foundItems = loadedItems
   }
+
+  if (action === 'search') {
+    if (actionValue === "") {
+      foundItems = loadedItems
+    } else {
+      foundItems = loadedItems.filter(el => {
+        return el.name.toLowerCase().indexOf(actionValue.toLowerCase()) > -1
+      })
+    }
+  }
+  if (action === 'sort') {
+    switch (actionValue) {
+      case 'by_name_asc':
+        foundItems = compareAndSort(oldFoundItems, 'name', 'asc')
+        break;
+      case 'by_name_desc':
+        foundItems = compareAndSort(oldFoundItems, 'name', 'desc')
+        break;
+      case 'by_exp_asc':
+        foundItems = compareAndSort(oldFoundItems, 'expiryDate', 'asc')
+        break;
+      case 'by_exp_desc':
+        foundItems = compareAndSort(oldFoundItems, 'expiryDate', 'desc')
+        break;
+      case 'by_date_asc':
+        foundItems = compareAndSort(oldFoundItems, 'id', 'asc')
+        break;
+      case 'by_date_desc':
+        foundItems = compareAndSort(oldFoundItems, 'id', 'desc')
+        break;
+      default:
+        foundItems = loadedItems
+    }
+  }
+  //console.log(foundItems)
   return {
     type: AT.FRIDGE_FETCH_ITEMS_SUCCESS,
     foundItems,
@@ -34,7 +68,7 @@ const fetchFridgeItemsError = error => {
   }
 }
 
-export const fetchFridgeItemsAsync = (loadedItems, search = false) => {
+export const fetchFridgeItemsAsync = (loadedItems, foundItems, action = false, actionValue) => {
   return async dispatch => {
     dispatch(fetchFridgeItems());
     if (loadedItems.length <= 0) {
@@ -43,13 +77,13 @@ export const fetchFridgeItemsAsync = (loadedItems, search = false) => {
         if (response.data === 'READING_ERROR') {
           dispatch(fetchFridgeItemsError(response.data))
         } else {
-          dispatch(fetchFridgeItemsSuccess(response.data, search))
+          dispatch(fetchFridgeItemsSuccess(response.data, foundItems, action, actionValue))
         }
       } catch (error) {
         dispatch(fetchFridgeItemsError(error.message))
       }
     } else {
-      dispatch(fetchFridgeItemsSuccess(loadedItems, search))
+      dispatch(fetchFridgeItemsSuccess(loadedItems, foundItems, action, actionValue))
     }
   }
 }
