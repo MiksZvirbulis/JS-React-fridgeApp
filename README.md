@@ -34,5 +34,4 @@ Mainly and most importantly - reduce food waste. However, it may also be for mon
 * https://prntscr.com/llsint
 
 ## Coming Soon
-* Replacing unsecure JSON data file with an actual database
 * Authentication (sign up, sign in, unique fridge and family fridge grouping)
