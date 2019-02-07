@@ -1,8 +1,11 @@
 import React, { Component } from 'react'
+import { Redirect } from 'react-router-dom'
+
+// Utilities
 import Input from '../../../components/Input/Input'
 import updateObject from '../../../utils/updateObject'
-import { Redirect } from 'react-router-dom'
 import errorHandler from '../../../utils/errorHandler'
+import checkValidity from '../../../utils/checkValidity'
 
 // date picker
 import moment from 'moment'
@@ -113,7 +116,7 @@ class AddItem extends Component {
     const updatedFormElement = updateObject(formElement,
       {
         value: value,
-        valid: this.checkValidity(value, formElement.validation)
+        valid: checkValidity(value, formElement.validation)
       }
     )
     const updatedForm = updateObject(this.state.formData, { [elementId]: updatedFormElement} )
@@ -122,23 +125,6 @@ class AddItem extends Component {
       formValid = updatedForm[key].valid && formValid
     }
     this.setState({ formData: updatedForm, formValid: formValid })
-  }
-
-  checkValidity = (value, rules) => {
-    let valid = true
-    if (rules.isRequired && value === "") {
-      valid = false
-    }
-    if (rules.minLength && value.length < rules.minLength) {
-      valid = false
-    }
-    if (rules.maxLength && value.length > rules.maxLength) {
-      valid = false
-    }
-    if (rules.dateFormat && !moment(value).isValid()) {
-      valid = false
-    }
-    return valid
   }
 
   handleSubmit = (event) => {

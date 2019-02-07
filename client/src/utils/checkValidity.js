@@ -1,7 +1,6 @@
-const moment = require('moment')
+import moment from 'moment'
 
-module.exports = {
-  check: (value, rules) => {
+const checkValidity = (value, rules, sameAs = null) => {
     let valid = true
     if (rules.isRequired && value === "") {
       valid = false
@@ -12,12 +11,15 @@ module.exports = {
     if (rules.maxLength && value.length > rules.maxLength) {
       valid = false
     }
-    if (rules.dateFormat && !moment(value).isValid()) {
-      valid = false
+    if (sameAs) {
+        if (value !== sameAs) {
+            valid = false
+        }
     }
-    if (rules.sameAs) {
-      valid = true
+    if (rules.dateFormat && !moment(value).isValid()) {
+        valid = false
     }
     return valid
-  }
 }
+
+export default checkValidity

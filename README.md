@@ -13,14 +13,60 @@ Mainly and most importantly - reduce food waste. However, it may also be for mon
 * Edit ingredients
 * Delete ingredients
 * Responsive Design
+* Sign up & Login
+
+## How to Run in Dev
+Run MySQL Server
+
+Create required tables & database
+
+```
+CREATE DATABASE `fridge`;
+
+CREATE TABLE `items` (
+    `id` INT(11) NOT NULL AUTO_INCREMENT,
+    `expirydate` VARCHAR(55) NOT NULL,
+    `name` VARCHAR(55) NOT NULL,
+    `open` VARCHAR(5) NOT NULL,
+    `type` VARCHAR(55) NOT NULL,
+    `weight` VARCHAR (5) NOT NULL,
+    `comment` TEXT NOT NULL,
+    PRIMARY KEY (`id`)
+);
+
+CREATE TABLE `users` (
+    `id` INT(11) NOT NULL AUTO_INCREMENT,
+    `username` VARCHAR(55) NOT NULL,
+    `password` VARCHAR(155) NOT NULL,
+    PRIMARY KEY (`id`)
+);
+
+CREATE TABLE `fridges` (
+    `id` INT(11) NOT NULL AUTO_INCREMENT,
+    `title` VARCHAR(255) NOT NULL,
+    `user_access` VARCHAR(55) NOT NULL,
+    `user_id` INT(11) NOT NULL,
+    PRIMARY KEY (`id`)
+);
+```
+
+```
+cd client && npm run server
+```
+
+In a separate terminal
+
+```
+cd client && npm start
+```
 
 ## Languages Used
 * English
 * JavaScript
     * React
     * Express
-* HTML
-* CSS
+* HTML5
+* CSS3
 
 ## Screenshots
 * https://prntscr.com/llsjaj
@@ -34,5 +80,4 @@ Mainly and most importantly - reduce food waste. However, it may also be for mon
 * https://prntscr.com/llsint
 
 ## Coming Soon
-* Replacing unsecure JSON data file with an actual database
-* Authentication (sign up, sign in, unique fridge and family fridge grouping)
+* Unique fridge and family fridge grouping

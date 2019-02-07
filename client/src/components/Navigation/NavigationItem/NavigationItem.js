@@ -1,6 +1,6 @@
 import React from 'react'
 import Aux from 'react-aux'
-import { NavLink } from 'react-router-dom'
+import { Link, NavLink } from 'react-router-dom'
 
 const NavigationItem = (props) => {
   const linkClass = props.logo ? "logo" : null
@@ -11,7 +11,7 @@ const NavigationItem = (props) => {
           props.path ?
           <NavLink exact to={props.path}>{props.children}</NavLink>
           :
-          <a href="#/">{props.children}</a>
+          <Link to="/">{props.children}</Link>
         }
       </li>
     </Aux>

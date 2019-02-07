@@ -20,7 +20,7 @@ function addItemSuccess(state, item, itemId) {
   }
   newItem['id'] = itemId
   items.push(newItem)
-  return updateObject(state, { loading: false, item: item, items: items, added: true })
+  return updateObject(state, { loading: false, item, items, added: true })
 }
 
 function updateItemSuccess(state, itemId, item) {
@@ -31,14 +31,15 @@ function updateItemSuccess(state, itemId, item) {
     editedItem[key] = item[key].value
   }
   items[itemIndex] = editedItem
-  return updateObject(state, { loading: false, item: item, items: items, added: true })
+  return updateObject(state, { loading: false, item, items, added: true })
 }
 
 function deleteItemSuccess(state, itemId) {
+  const foundItems = [...state.foundItems]
   const items = [...state.items]
-  const itemIndex = items.findIndex(it => it.id === parseInt(itemId))
-  items.splice(itemIndex, 1)
-  return updateObject(state, { loading: false, items: items, deleted: true })
+  const itemIndex = foundItems.findIndex(it => it.id === parseInt(itemId))
+  foundItems.splice(itemIndex, 1)
+  return updateObject(state, { loading: false, foundItems, items, deleted: true })
 }
 
 export default function fridge(state = initialState, action) {

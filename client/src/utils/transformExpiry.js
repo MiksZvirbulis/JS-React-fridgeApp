@@ -4,7 +4,7 @@ const transformExpiry = expiryDate => {
   let expiry = {}
   const now = moment()
   expiryDate = moment(expiryDate)
-  const dayDifference = expiryDate.diff(now, 'days') + 1
+  const dayDifference = expiryDate.diff(now, 'days')
 
   if (!moment(expiryDate).isValid()) {
     return 'Date is not valid'

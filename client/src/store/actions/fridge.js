@@ -2,14 +2,12 @@ import * as AT from '../actionTypes'
 import axios from 'axios'
 import compareAndSort from '../../utils/compareAndSort'
 
-const API_URL = 'http://localhost:5000/api/fridge/'
+const API_URL = '/api/fridge/'
 
 // Receiving all Fridge Items
 
 const fetchFridgeItems = () => {
-  return {
-    type: AT.FRIDGE_FETCH_ITEMS
-  }
+  return { type: AT.FRIDGE_FETCH_ITEMS }
 }
 
 const fetchFridgeItemsSuccess = (items, oldFoundItems, action, actionValue) => {
@@ -53,19 +51,11 @@ const fetchFridgeItemsSuccess = (items, oldFoundItems, action, actionValue) => {
         foundItems = loadedItems
     }
   }
-  //console.log(foundItems)
-  return {
-    type: AT.FRIDGE_FETCH_ITEMS_SUCCESS,
-    foundItems,
-    items
-  }
+  return { type: AT.FRIDGE_FETCH_ITEMS_SUCCESS, foundItems, items }
 }
 
 const fetchFridgeItemsError = error => {
-  return {
-    type: AT.FRIDGE_FETCH_ITEMS_ERROR,
-    error
-  }
+  return { type: AT.FRIDGE_FETCH_ITEMS_ERROR, error }
 }
 
 export const fetchFridgeItemsAsync = (loadedItems, foundItems, action = false, actionValue) => {
@@ -91,32 +81,23 @@ export const fetchFridgeItemsAsync = (loadedItems, foundItems, action = false, a
 // Adding a new Fridge Item
 
 const addFridgeItems = () => {
-  return {
-    type: AT.FRIDGE_ADD_ITEM
-  }
+  return { type: AT.FRIDGE_ADD_ITEM }
 }
 
 const addFridgeItemsSuccess = (item, itemId) => {
-  return {
-    type: AT.FRIDGE_ADD_ITEM_SUCCESS,
-    item,
-    itemId
-  }
+  return { type: AT.FRIDGE_ADD_ITEM_SUCCESS, item, itemId }
 }
 
 const addFridgeItemsError = error => {
-  return {
-    type: AT.FRIDGE_ADD_ITEM_ERROR,
-    error
-  }
+  return { type: AT.FRIDGE_ADD_ITEM_ERROR, error }
 }
 
 export const addFridgeItemsAsync = item => {
   return async dispatch => {
     dispatch(addFridgeItems());
+    dispatch(fetchFridgeItemsAsync([], [], false, false));
     try {
       const response = await axios.post(API_URL, item)
-      console.log(response.data)
       if (typeof response.data === 'object' && response.data !== null) {
         dispatch(addFridgeItemsSuccess(item, response.data.itemId))
       } else {
@@ -131,23 +112,15 @@ export const addFridgeItemsAsync = item => {
 // Fetching an existing Fridge Item
 
 const fetchFridgeItem = () => {
-  return {
-    type: AT.FRIDGE_FETCH_ITEM
-  }
+  return { type: AT.FRIDGE_FETCH_ITEM }
 }
 
 const fetchFridgeItemSuccess = item => {
-  return {
-    type: AT.FRIDGE_FETCH_ITEM_SUCCESS,
-    item
-  }
+  return { type: AT.FRIDGE_FETCH_ITEM_SUCCESS, item }
 }
 
 const fetchFridgeItemError = error => {
-  return {
-    type: AT.FRIDGE_FETCH_ITEM_ERROR,
-    error
-  }
+  return { type: AT.FRIDGE_FETCH_ITEM_ERROR, error }
 }
 
 export const fetchFridgeItemAsync = itemId => {
@@ -169,24 +142,15 @@ export const fetchFridgeItemAsync = itemId => {
 // Updating an existing Fridge Item
 
 const updateFridgeItem = () => {
-  return {
-    type: AT.FRIDGE_UPDATE_ITEM
-  }
+  return { type: AT.FRIDGE_UPDATE_ITEM }
 }
 
 const updateFridgeItemSuccess = (itemId, item) => {
-  return {
-    type: AT.FRIDGE_UPDATE_ITEM_SUCCESS,
-    itemId,
-    item
-  }
+  return { type: AT.FRIDGE_UPDATE_ITEM_SUCCESS, itemId, item }
 }
 
 const updateFridgeItemError = error => {
-  return {
-    type: AT.FRIDGE_UPDATE_ITEM_ERROR,
-    error
-  }
+  return { type: AT.FRIDGE_UPDATE_ITEM_ERROR, error }
 }
 
 export const updateFridgeItemAsync = (itemId, newData) => {
@@ -208,23 +172,15 @@ export const updateFridgeItemAsync = (itemId, newData) => {
 // Deleting a Fridge Item
 
 const deleteFridgeItem = () => {
-  return {
-    type: AT.FRIDGE_DELETE_ITEM
-  }
+  return { type: AT.FRIDGE_DELETE_ITEM }
 }
 
 const deleteFridgeItemSuccess = itemId => {
-  return {
-    type: AT.FRIDGE_DELETE_ITEM_SUCCESS,
-    itemId
-  }
+  return { type: AT.FRIDGE_DELETE_ITEM_SUCCESS, itemId }
 }
 
 const deleteFridgeItemError = error => {
-  return {
-    type: AT.FRIDGE_DELETE_ITEM_ERROR,
-    error
-  }
+  return { type: AT.FRIDGE_DELETE_ITEM_ERROR, error }
 }
 
 export const deleteFridgeItemAsync = itemId => {

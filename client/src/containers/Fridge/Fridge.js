@@ -1,6 +1,5 @@
 // component
 import React, { Component } from 'react'
-import './Fridge.css'
 import FridgeItems from '../../components/FridgeItems/FridgeItems'
 
 // redux
