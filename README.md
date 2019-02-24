@@ -80,4 +80,8 @@ cd client && npm start
 * https://prntscr.com/llsint
 
 ## Coming Soon
+<<<<<<< HEAD
 * Unique fridge and family fridge grouping
+=======
+* Unique fridge and family fridge grouping
+>>>>>>> f3dfcf8e09a50619f55b95e42b289c28b958db26
