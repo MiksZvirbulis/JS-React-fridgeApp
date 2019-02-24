@@ -8,7 +8,7 @@ exports.signup = (req, res) => {
     const receivedData = {
         ...req.body
     }
-
+    
     let userValid = true
     const user = {}
     for (let key in receivedData) {
@@ -18,17 +18,37 @@ exports.signup = (req, res) => {
     }
 
     if (userValid) {
-        bcrypt.hash(user.password, 10, (err, hash) => {
-            if (err) {
+        bcrypt.hash(user.password, 10, (checkHashError, hash) => {
+            if (checkHashError) {
                 res.send('SIGNUP_ERROR')
             } else {
-                connection.query("SELECT `id` FROM `users` WHERE `username` = ?", [user.username], (err, result) => {
-                    if (result.length === 0) {
-                        connection.query("INSERT INTO `users` (`username`, `password`) VALUES (?, ?)", [user.username, hash], (error, result) => {
-                            if (error) {
+                connection.query("SELECT `id` FROM `users` WHERE `username` = ?", [user.username], (findUserError, findUserResult) => {
+                    if (findUserResult.length === 0) {
+                        connection.query("INSERT INTO `users` (`username`, `password`) VALUES (?, ?)", [user.username, hash], (insertUserError, insertUserResult) => {
+                            if (insertUserError) {
                                 res.send('WRITING_ERROR')
                             } else {
-                                res.json('SUCCESS')
+                                connection.query("INSERT INTO `fridges` (`user_id`, `title`, `user_access`) VALUES (?, ?, ?)", [insertUserResult.insertId, user.username + "'s Fridge", '[' + insertUserResult.insertId + ']'], (insertFridgeError, insertFridgeResult) => {
+                                    if (insertFridgeError) {
+                                        res.send('WRITING_ERROR')
+                                    } else {
+                                        connection.query("INSERT INTO `items` (`name`, `weight`, `type`, `expiryDate`, `comment`, `open`, `fridge_id`) VALUES (?, ?, ?, ?, ?, ?, ?)", [
+                                            'Sample Item',
+                                            '500g',
+                                            'no_type',
+                                            '2018-11-29T00:00:00.000Z',
+                                            'Sample item was branded Tesco, bought for dinner',
+                                            'false',
+                                            insertFridgeResult.insertId
+                                        ], (insertItemError, insertItemResult) => {
+                                            if (insertItemError) {
+                                                res.send('WRITING_ERROR')
+                                            } else {
+                                                res.json('SUCCESS')
+                                            }
+                                        })
+                                    }
+                                })
                             }
                         })
                     } else {
@@ -46,25 +66,25 @@ exports.signup = (req, res) => {
 exports.login = (req, res) => {
     const { username, password } = req.body;
 
-    connection.query("SELECT `password` FROM `users` WHERE `username` = ?", [username], (error, user) => {
+    connection.query("SELECT u.password AS uPw, u.id AS uId, f.id AS fId FROM users u LEFT JOIN fridges f ON f.user_id = u.id WHERE `username` = ?", [username], (error, user) => {
         if (error) {
-            res.status(401).send('READING_ERROR')
+            res.status(202).send('READING_ERROR')
         } else {
             if(user.length === 0) {
-                res.status(401).send('LOGIN_FAILED')
+                res.status(202).send('LOGIN_FAILED')
             } else {
-            bcrypt.compare(password, user[0].password, (err, result) => {
+            bcrypt.compare(password, user[0].uPw, (err, result) => {
                 if (err) {
-                    res.status(401).send('READING_ERROR')
+                    res.status(202).send('READING_ERROR')
                 } else {
                     if (result === false) {
-                        res.status(401).send('LOGIN_FAILED')
+                        res.status(202).send('LOGIN_FAILED')
                     } else {
                         const payload = { username }
                         const token = jwt.sign(payload, secret, {
                             expiresIn: '1h'
                         })
-                        res.cookie('token', token, { httpOnly: true }).sendStatus(200)
+                        res.cookie('token', token, { httpOnly: true }).status(200).json({ userId: user[0].uId, fridgeId: user[0].fId })
                     }
                 }
             })

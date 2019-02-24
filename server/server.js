@@ -44,8 +44,8 @@ dataValidation = require('./dataValidation')
 const withAuth = require('./withAuth')
 
 //FRIDGE ROUTES
-// GET request for fridge items
-router.get('/fridge', withAuth, fridge.list)
+// GET request for fridge items with ID specified
+router.get('/fridge/items/:id', withAuth, fridge.list)
 // GET request for a specific fridge item
 router.get('/fridge/:id', withAuth, fridge.item)
 // PUT request to update a specific fridge item
@@ -54,6 +54,12 @@ router.put('/fridge/:id', withAuth, fridge.updateItem)
 router.post('/fridge', withAuth, fridge.addItem)
 // POST request to delete a specific fridge item
 router.post('/fridge/delete/:id', withAuth, fridge.deleteItem)
+// GET request to find all users with access to user's fridge
+router.get('/fridge/access/:id', withAuth, fridge.getAccess)
+// POST request to give fridge access to specified user
+router.post('/fridge/access', withAuth, fridge.giveAccess)
+// GET all fridges which user has access to
+router.get('/fridge/all/:id', withAuth, fridge.getFridges)
 
 // AUTH ROUTES
 // POST request to signup a new user
@@ -63,6 +69,6 @@ router.post('/auth/login', auth.login)
 // POST request to find log user out
 router.post('/auth/logout', withAuth, auth.logout)
 // Check if logged in
-router.get('/auth/check', withAuth, (req, res) => { res.sendStatus(200) })
+router.get('/auth/check', withAuth, (req, res) => { res.status(200).json({ userId: req.userId, fridgeId: req.fridgeId}) })
 
 app.listen(port, () => console.log(`Server listening on port ${port}`))

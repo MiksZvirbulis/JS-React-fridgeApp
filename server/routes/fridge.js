@@ -1,17 +1,21 @@
-// Handlinh all routes for fridge requests
+// Handling all routes for fridge requests
+
+// Get all items
 
 exports.list = (req, res) => {
     // Query for all items
-    connection.query('SELECT * FROM `items`', (error, items) => {
+    connection.query('SELECT * FROM `items` WHERE `fridge_id` = ?', [req.params.id], (error, items) => {
         if (error) {
             // Send for error handling if query failed
-            res.send('READING_ERROR')
+            res.sendStatus(202)
         } else {
             // Send JSON with query results
             res.json(items)
         }
     })
 }
+
+// Get invidiual item
 
 exports.item = (req, res) => {
     // Query to select an item with ID attached to request
@@ -31,6 +35,8 @@ exports.item = (req, res) => {
         }
     })
 }
+
+// Update individual item
 
 exports.updateItem = (req, res) => {
     // Query to select an item with ID attached to request
@@ -85,11 +91,11 @@ exports.updateItem = (req, res) => {
     })
 }
 
+// Post a new item
+
 exports.addItem = (req, res) => {
     // Check validation of item received in the body of the request
-    const receivedItem = {
-        ...req.body
-    }
+    const receivedItem = { ...req.body }
     let itemValid = true
     const newItem = {}
     for (let key in receivedItem) {
@@ -100,13 +106,14 @@ exports.addItem = (req, res) => {
     // Check if itemValid = true
     if (itemValid) {
         // Query to insert the new item in the database
-        connection.query('INSERT INTO `items` (`name`, `weight`, `type`, `expiryDate`, `comment`, `open`) VALUES (?, ?, ?, ?, ?, ?)', [
+        connection.query('INSERT INTO `items` (`name`, `weight`, `type`, `expiryDate`, `comment`, `open`, `fridge_id`) VALUES (?, ?, ?, ?, ?, ?, ?)', [
             newItem['name'],
             newItem['weight'],
             newItem['type'],
             newItem['expiryDate'],
             newItem['comment'],
-            newItem['open']
+            newItem['open'],
+            newItem['fridgeId']
         ], (error, result) => {
             if (error) {
                 // Send for error handling if the insert query was not successful
@@ -124,20 +131,30 @@ exports.addItem = (req, res) => {
     }
 }
 
+// Delete an individual item
+
 exports.deleteItem = (req, res) => {
     // Query to select an item with ID attached to request
-    connection.query('SELECT * FROM `items` WHERE `id` = ?', [req.params.id], (error, item) => {
-        if (error) {
+    connection.query('SELECT `fridge_id` FROM `items` WHERE `id` = ?', [req.params.id], (findItemError, findItemResult) => {
+        if (findItemError) {
             // Send for error handling if query failed
             res.send('READING_ERROR')
         } else {
-            if (item.length === 0) {
+            if (findItemResult.length === 0) {
                 // Send for error handling if item was not found in database
                 res.send('NOT_FOUND')
             } else {
-                // Query to delete the item with the associated item ID
-                connection.query('DELETE FROM `items` WHERE `id` = ?', [req.params.id], (error, item) => {
-                    if (error) {
+                // Query to find all items with fridge_id found for item
+                connection.query('SELECT `id` FROM `items` WHERE `fridge_id` = ?', [findItemResult[0].fridge_id], (findItemsError, findItemsResult) => {
+                    if (findItemsError) {
+                        // Send for error handling if the delete query was not successful
+                        res.send('WRITING_ERROR')
+                    } else {
+                        // If fridge has more than 1 items, then proceed with deletion
+                        if (findItemsResult.length > 1) {
+                          // Query to delete the item with the associated item ID
+                connection.query('DELETE FROM `items` WHERE `id` = ?', [req.params.id], (deleteItemError, deleteItemResult) => {
+                    if (deleteItemError) {
                         // Send for error handling if the delete query was not successful
                         res.send('WRITING_ERROR')
                     } else {
@@ -145,7 +162,90 @@ exports.deleteItem = (req, res) => {
                         res.send("SUCCESS")
                     }
                 })
+                // Otherwise, if there is only 1 or 0 items in the fridge, you may not continue
+                } else {
+                    res.send("ONLY_ONE_ITEM")
+                }
+                }
+            })
             }
+        }
+    })
+}
+
+// Get all users with access to user's fridge
+
+exports.getAccess = (req, res) => {
+    // Query to select username's of users who have access to another user's fridge
+    connection.query('SELECT u.username, u.id, f.user_access, f.user_id FROM users u LEFT JOIN fridges f ON JSON_CONTAINS(f.user_access, CAST(u.id as JSON), ?) WHERE f.user_id = ?', ['$', req.params.id], (error, users) => {
+        if (error) {
+            // Send for error handling if query failed
+            res.status(202).send('READING_ERROR')
+        } else {
+            // Check if user was found in database
+            if (users.length === 0) {
+                // Send for error handling if no users have access
+                res.status(202).send('NO_USER_HAS_ACCESS')
+            } else {
+                // Create array for users with access
+                let usersWithAccess = []
+                for (let key in users) {
+                    usersWithAccess.push(users[key].username)
+                }
+                // Send users with access array as JSON
+                res.status(200).json(usersWithAccess)
+            }
+        }
+    })
+}
+
+// Give a specified user access to a new fridge
+
+exports.giveAccess = (req, res) => {
+    // TEST QUERY IGNORE - query which eventually will allow to see if user with a specific id has access to fridge, probably will use mysql JSON_CONTAINS anyways...
+    connection.query('SELECT `user_access` FROM `fridges` WHERE `id` = ?', [1], (err, fridge) => {
+        const userAccess = JSON.parse(fridge[0].user_access)
+        // console.log(userAccess.findIndex(id => id === 2))
+    })
+    // TEST QUERY IGNORE
+    // Request body should receive user.username and user.userId
+    const user = { ...req.body }
+    // Query to find user in the database with username provided
+    connection.query("SELECT `id` FROM `users` WHERE `username` = ?", [user.username], (findUserError, findUserResult) => {
+        // If a user was found
+        if (findUserResult.length > 0) {
+            // Query that adds the specified user ID to the access array in the database
+            connection.query("UPDATE `fridges` SET `user_access` = JSON_ARRAY_APPEND(`user_access`, '$', ?) WHERE `user_id` = ? AND NOT JSON_CONTAINS(`user_access`, '?')", [findUserResult[0].id, user.userId, findUserResult[0].id], (updateAccessError, updateAccessResult) => {
+                if (updateAccessError) {
+                    // Testing if the user already has access is included in the query, this is just to send for error handling if query fails
+                    res.status(202).send('USER_HAS_ACCESS')
+                } else {
+                    res.status(200).send('SUCCESS')
+                }
+            })
+        } else {
+            // If a user was not found, sending for error handling
+            res.status(202).send('USER_NOT_FOUND')
+        }
+    })
+}
+
+// Get all fridges that user has access to
+
+exports.getFridges = (req, res) => {
+    // Query that selects ALL fridges which user id provided in the request parameters has access to
+    connection.query("SELECT `id`, `title` FROM `fridges` WHERE JSON_CONTAINS(`user_access`, ?)", [req.params.id], (findFridgesError, findFridgesResult) => {
+        if (findFridgesError) {
+            // Query error, sending for error handling
+            console.log(findFridgesError)
+            res.status(202).send('READING_ERROR')
+        } else {
+            const fridges = []
+            for (let key in findFridgesResult) {
+                fridges.push({ value: findFridgesResult[key].id, display: findFridgesResult[key].title })
+            }
+            // Sending successful JSON array with found fridges
+            res.status(200).json(fridges)
         }
     })
 }

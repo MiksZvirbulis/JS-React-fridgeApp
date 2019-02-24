@@ -6,16 +6,14 @@ const API_URL = '/api/fridge/'
 
 // Receiving all Fridge Items
 
-const fetchFridgeItems = () => {
-  return { type: AT.FRIDGE_FETCH_ITEMS }
-}
+const fetchFridgeItems = () => { return { type: AT.FRIDGE_FETCH_ITEMS } }
 
-const fetchFridgeItemsSuccess = (items, oldFoundItems, action, actionValue) => {
-  let loadedItems = [...items]
+const fetchFridgeItemsSuccess = (items, oldFoundItems, action, actionValue, fridgeId) => {
+  let loadedItems = [ ...items ]
   let foundItems = []
-
-  if (oldFoundItems === undefined || oldFoundItems === null) {
+  if (oldFoundItems.length === 0) {
     foundItems = loadedItems
+    oldFoundItems = loadedItems
   }
 
   if (action === 'search') {
@@ -51,23 +49,21 @@ const fetchFridgeItemsSuccess = (items, oldFoundItems, action, actionValue) => {
         foundItems = loadedItems
     }
   }
-  return { type: AT.FRIDGE_FETCH_ITEMS_SUCCESS, foundItems, items }
+  return { type: AT.FRIDGE_FETCH_ITEMS_SUCCESS, foundItems, items, openFridgeId: fridgeId }
 }
 
-const fetchFridgeItemsError = error => {
-  return { type: AT.FRIDGE_FETCH_ITEMS_ERROR, error }
-}
+const fetchFridgeItemsError = error => { return { type: AT.FRIDGE_FETCH_ITEMS_ERROR, error } }
 
-export const fetchFridgeItemsAsync = (loadedItems, foundItems, action = false, actionValue) => {
+export const fetchFridgeItemsAsync = (loadedItems, foundItems, action = false, actionValue, fridgeId) => {
   return async dispatch => {
     dispatch(fetchFridgeItems());
-    if (loadedItems.length <= 0) {
+    if (loadedItems.length === 0) {
       try {
-        const response = await axios(API_URL)
-        if (response.data === 'READING_ERROR') {
+        const response = await axios.get(API_URL + 'items/' + fridgeId)
+        if (response.status === 202) {
           dispatch(fetchFridgeItemsError(response.data))
         } else {
-          dispatch(fetchFridgeItemsSuccess(response.data, foundItems, action, actionValue))
+          dispatch(fetchFridgeItemsSuccess(response.data, foundItems, action, actionValue, fridgeId))
         }
       } catch (error) {
         dispatch(fetchFridgeItemsError(error.message))
@@ -80,17 +76,11 @@ export const fetchFridgeItemsAsync = (loadedItems, foundItems, action = false, a
 
 // Adding a new Fridge Item
 
-const addFridgeItems = () => {
-  return { type: AT.FRIDGE_ADD_ITEM }
-}
+const addFridgeItems = () => { return { type: AT.FRIDGE_ADD_ITEM } }
 
-const addFridgeItemsSuccess = (item, itemId) => {
-  return { type: AT.FRIDGE_ADD_ITEM_SUCCESS, item, itemId }
-}
+const addFridgeItemsSuccess = (item, itemId) => { return { type: AT.FRIDGE_ADD_ITEM_SUCCESS, item, itemId } }
 
-const addFridgeItemsError = error => {
-  return { type: AT.FRIDGE_ADD_ITEM_ERROR, error }
-}
+const addFridgeItemsError = error => { return { type: AT.FRIDGE_ADD_ITEM_ERROR, error } }
 
 export const addFridgeItemsAsync = item => {
   return async dispatch => {
@@ -111,17 +101,11 @@ export const addFridgeItemsAsync = item => {
 
 // Fetching an existing Fridge Item
 
-const fetchFridgeItem = () => {
-  return { type: AT.FRIDGE_FETCH_ITEM }
-}
+const fetchFridgeItem = () => { return { type: AT.FRIDGE_FETCH_ITEM } }
 
-const fetchFridgeItemSuccess = item => {
-  return { type: AT.FRIDGE_FETCH_ITEM_SUCCESS, item }
-}
+const fetchFridgeItemSuccess = item => { return { type: AT.FRIDGE_FETCH_ITEM_SUCCESS, item } }
 
-const fetchFridgeItemError = error => {
-  return { type: AT.FRIDGE_FETCH_ITEM_ERROR, error }
-}
+const fetchFridgeItemError = error => { return { type: AT.FRIDGE_FETCH_ITEM_ERROR, error } }
 
 export const fetchFridgeItemAsync = itemId => {
   return async dispatch => {
@@ -141,17 +125,11 @@ export const fetchFridgeItemAsync = itemId => {
 
 // Updating an existing Fridge Item
 
-const updateFridgeItem = () => {
-  return { type: AT.FRIDGE_UPDATE_ITEM }
-}
+const updateFridgeItem = () => { return { type: AT.FRIDGE_UPDATE_ITEM } }
 
-const updateFridgeItemSuccess = (itemId, item) => {
-  return { type: AT.FRIDGE_UPDATE_ITEM_SUCCESS, itemId, item }
-}
+const updateFridgeItemSuccess = (itemId, item) => { return { type: AT.FRIDGE_UPDATE_ITEM_SUCCESS, itemId, item } }
 
-const updateFridgeItemError = error => {
-  return { type: AT.FRIDGE_UPDATE_ITEM_ERROR, error }
-}
+const updateFridgeItemError = error => { return { type: AT.FRIDGE_UPDATE_ITEM_ERROR, error } }
 
 export const updateFridgeItemAsync = (itemId, newData) => {
   return async dispatch => {
@@ -171,17 +149,11 @@ export const updateFridgeItemAsync = (itemId, newData) => {
 
 // Deleting a Fridge Item
 
-const deleteFridgeItem = () => {
-  return { type: AT.FRIDGE_DELETE_ITEM }
-}
+const deleteFridgeItem = () => { return { type: AT.FRIDGE_DELETE_ITEM } }
 
-const deleteFridgeItemSuccess = itemId => {
-  return { type: AT.FRIDGE_DELETE_ITEM_SUCCESS, itemId }
-}
+const deleteFridgeItemSuccess = itemId => { return { type: AT.FRIDGE_DELETE_ITEM_SUCCESS, itemId } }
 
-const deleteFridgeItemError = error => {
-  return { type: AT.FRIDGE_DELETE_ITEM_ERROR, error }
-}
+const deleteFridgeItemError = error => { return { type: AT.FRIDGE_DELETE_ITEM_ERROR, error } }
 
 export const deleteFridgeItemAsync = itemId => {
   return async dispatch => {
@@ -198,3 +170,80 @@ export const deleteFridgeItemAsync = itemId => {
     }
   }
 }
+
+// Getting users with access
+
+const getUserAccess = () => { return { type: AT.USER_ACCESS } }
+
+const getUserAccessSuccess = users => { return { type: AT.USER_ACCESS_SUCCESS, users } }
+
+const getUserAccessError = error => { return { type: AT.USER_ACCESS_ERROR, error } }
+
+export const getUserAccessAsync = userId => {
+  return async dispatch => {
+    dispatch(getUserAccess());
+    try {
+      const response = await axios.get(API_URL + 'access/' + userId)
+      if (response.status === 200) {
+        dispatch(getUserAccessSuccess(response.data))
+      } else {
+        dispatch(getUserAccessError(response.data))
+      }
+    } catch (error) {
+      dispatch(getUserAccessError(error.message))
+    }
+  }
+}
+
+// Give user access
+
+const giveUserAccess = () => { return { type: AT.GIVE_USER_ACCESS } }
+
+const giveUserAccessSuccess = () => { return { type: AT.GIVE_USER_ACCESS_SUCCESS } }
+
+const giveUserAccessError = error => { return { type: AT.GIVE_USER_ACCESS_ERROR, error } }
+
+export const giveUserAccessAsync = user => {
+  return async dispatch => {
+    dispatch(giveUserAccess());
+    try {
+      const response = await axios.post(API_URL + 'access/', { userId: user.userId, username: user.username })
+      if (response.status === 200) {
+        dispatch(giveUserAccessSuccess(response.data))
+        dispatch(getUserAccessAsync(user.userId))
+      } else {
+        dispatch(giveUserAccessError(response.data))
+      }
+    } catch (error) {
+      dispatch(giveUserAccessError(error.message))
+    }
+  }
+}
+
+// Getting fridges which user has access to
+
+const getFridges = () => { return { type: AT.FRIDGES_WITH_ACCESS } }
+
+const getFridgesSuccess = fridges => { return { type: AT.FRIDGES_WITH_ACCESS_SUCCESS, fridges } }
+
+const getFridgesError = error => { return { type: AT.FRIDGES_WITH_ACCESS_ERROR, error } }
+
+export const getFridgesAsync = userId => {
+  return async dispatch => {
+    dispatch(getFridges());
+    try {
+      const response = await axios.get(API_URL + 'all/' + userId)
+      if (response.status === 200) {
+        dispatch(getFridgesSuccess(response.data))
+      } else {
+        dispatch(getFridgesError(response.data))
+      }
+    } catch (error) {
+      dispatch(getFridgesError(error.message))
+    }
+  }
+}
+
+// Reset data after logout
+
+export const resetLogout = () => { return { type: AT.RESET_LOGOUT } }

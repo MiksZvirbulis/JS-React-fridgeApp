@@ -110,6 +110,7 @@ class EditItem extends Component {
   }
 
   componentDidMount() {
+    this._isMounted = true
     Promise.resolve(this.props.fetchItem(this.props.match.params.id))
     .then(response => {
       if (this.props.error) {
@@ -121,11 +122,17 @@ class EditItem extends Component {
           let newValue = key === 'expiryDate' ? moment(this.props.item[key]) : this.props.item[key]
           const updatedElement = updateObject(element, { value: newValue } )
           const updatedForm = updateObject(this.state.formData, { [key]: updatedElement })
+          if (this._isMounted) {
           this.setState({ formData: updatedForm, deleted: false })
+          }
         }
       }
     })
   }
+
+  componentWillUnmount() {
+    this._isMounted = false
+}
 
   handleChange = (event, elementId) => {
     let value = ''
@@ -216,11 +223,11 @@ class EditItem extends Component {
         <h1>Edit Item</h1>
         <form>
           {message}
-          {this.props.error ? null : form}
+          {form}
         </form>
       </div>
     )
-    if (this.state.deleted) {
+    if (this.props.deleted) {
       content = <Redirect to="/" />
     }
     return content

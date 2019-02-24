@@ -4,11 +4,10 @@ import axios from 'axios'
 
 const API_URL = '/api/auth/'
 
-export default function withAuth(AuthComponent, loggedIn) {
+export default function withAuth(AuthComponent) {
 
     return class extends Component {
         state = {
-            loading: true,
             redirect: false
         }
 
@@ -16,7 +15,7 @@ export default function withAuth(AuthComponent, loggedIn) {
             let call
             if (call) {
                 call.cancel("One request at a time!")
-            } 
+            }
             call = axios.CancelToken.source()
             config.cancelToken = call.token
             return axios(config)
@@ -25,25 +24,24 @@ export default function withAuth(AuthComponent, loggedIn) {
         componentDidMount() {
             this._isMounted = true
 
-            if (loggedIn) {
             this.checkAuth({method: 'get', url: API_URL + 'check', timeout: 60000})
             .then(response => {
                 if (response.status === 200) {
                     if (this._isMounted) {
-                        this.setState({ redirect: false, loading: false })
+                    this.setState({ redirect: false })
                     }
                 } else {
-                    throw new Error(response.error)
+                    if (this._isMounted) {
+                    this.setState({ redirect: true })
+                    }
                 }
             })
             .catch(error => {
                 if (this._isMounted) {
-                    this.setState({ redirect: true, loading: false })
+                    console.error(error)
+                    this.setState({ redirect: true })
                 }
             })
-        } else {
-            this.setState({ redirect: true, loading: false }) 
-        }
         }
 
         componentWillUnmount() {
@@ -51,12 +49,9 @@ export default function withAuth(AuthComponent, loggedIn) {
         }
 
         render() {
-            const { loading, redirect } = this.state
-            if (loading) {
-                return <div className="Loader"></div>
-              }
+            const { redirect } = this.state
             if (redirect) {
-                return <Redirect to="/login" />
+                return <Redirect to='/login' />
             }
             return (
                 <React.Fragment>

@@ -2,6 +2,7 @@
 import React, { PureComponent } from 'react'
 import FridgeItem from './FridgeItem/FridgeItem'
 import './FridgeItems.css'
+import { Link } from 'react-router-dom'
 import errorHandler from '../../utils/errorHandler'
 import * as actions from '../../store/actions'
 
@@ -11,11 +12,15 @@ import { connect } from 'react-redux'
 class FridgeItems extends PureComponent {
 
   handleSearch = event => {
-    this.props.fetchItems(this.props.items, this.props.foundItems, "search", event.target.value)
+    this.props.fetchItems(this.props.items, this.props.foundItems, "search", event.target.value, this.props.fridgeId)
   }
 
   handleSort = event => {
-    this.props.fetchItems(this.props.items, this.props.foundItems, "sort", event.target.value)
+    this.props.fetchItems(this.props.items, this.props.foundItems, "sort", event.target.value, this.props.fridgeId)
+  }
+
+  handleFridgeChange = event => {
+    this.props.fetchItems([], this.props.foundItems, false, false, event.target.value)
   }
 
   render() {
@@ -39,9 +44,18 @@ class FridgeItems extends PureComponent {
           open={item.open} />
       })
     }
+    const loadedFridges = { ...this.props.fridges }
+    let fridges = []
+    for (let key in loadedFridges) {
+      fridges.push(<option key={loadedFridges[key].value} value={loadedFridges[key].value}>{loadedFridges[key].display}</option>)
+    }
     return (
       <div className="FridgeItems">
+      { (items.length > 0) ?
         <div className="Search">
+        <select value={this.props.openFridgeId} onChange={this.handleFridgeChange}>
+        {fridges.map(fridge => { return fridge })}
+      </select> 
           <input type="text" onChange={this.handleSearch} placeholder="Search for ingredient..." />
           <select defaultValue="sort_by" onChange={this.handleSort}>
             <option value="sort_by" disabled>Sort by...</option>
@@ -53,7 +67,8 @@ class FridgeItems extends PureComponent {
             <option value="by_date_asc">By Date Added (oldest to newest)</option>
           </select>
         </div>
-        {items}
+      : <div>Your fridge is empty. Please add something by clicking <Link to="/add"><b>here</b></Link>!</div> }
+      {items}
       </div>
     )
   }
@@ -63,13 +78,16 @@ const mapStateToProps = state => {
   return {
     items: state.fridge.items,
     foundItems: state.fridge.foundItems,
-    error: state.fridge.error
+    error: state.fridge.error,
+    fridgeId: state.auth.fridgeId,
+    openFridgeId: state.fridge.openFridgeId,
+    fridges: state.fridge.fridges
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
-    fetchItems: (loadedItems, foundItems, action, value) => dispatch(actions.fetchFridgeItemsAsync(loadedItems, foundItems, action, value))
+    fetchItems: (loadedItems, foundItems, action, value, fridgeId) => dispatch(actions.fetchFridgeItemsAsync(loadedItems, foundItems, action, value, fridgeId))
   }
 }
 

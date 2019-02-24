@@ -5,17 +5,11 @@ const API_URL = '/api/auth/'
 
 // SIGNUP
 
-const authSignup = () => {
-    return { type: AT.AUTH_SIGNUP }
-}
+const authSignup = () => { return { type: AT.AUTH_SIGNUP } }
 
-const authSignupSuccess = () => {
-    return { type: AT.AUTH_SIGNUP_SUCCESS }
-}
+const authSignupSuccess = () => { return { type: AT.AUTH_SIGNUP_SUCCESS } }
 
-const authSignupError = error => {
-    return { type: AT.AUTH_SIGNUP_ERROR, error }
-}
+const authSignupError = error => { return { type: AT.AUTH_SIGNUP_ERROR, error } }
 
 export const authSignupAsync = user => {
     return async dispatch => {
@@ -33,23 +27,15 @@ export const authSignupAsync = user => {
     }
 }
 
-export const updateSignUp = () => {
-    return { type: AT.AUTH_UPDATE_SIGNUP }
-}
+export const updateSignUp = () => { return { type: AT.AUTH_UPDATE_SIGNUP } }
 
 // LOGIN
 
-const authLogin = () => {
-    return { type: AT.AUTH_LOGIN }
-}
+const authLogin = () => { return { type: AT.AUTH_LOGIN } }
 
-const authLoginSuccess = () => {
-    return { type: AT.AUTH_LOGIN_SUCCESS }
-}
+const authLoginSuccess = userData => { return { type: AT.AUTH_LOGIN_SUCCESS, userId: userData.userId, fridgeId: userData.fridgeId } }
 
-const authLoginError = error => {
-    return { type: AT.AUTH_LOGIN_ERROR, error }
-}
+const authLoginError = error => { return { type: AT.AUTH_LOGIN_ERROR, error } }
 
 export const authLoginAsync = userData => {
     return async dispatch => {
@@ -57,7 +43,7 @@ export const authLoginAsync = userData => {
         try {
             const response = await axios.post(API_URL + 'login', userData)
             if (response.status === 200) {
-                dispatch(authLoginSuccess())
+                dispatch(authLoginSuccess(response.data))
             } else {
                 dispatch(authLoginError(response.data))
             }
@@ -69,17 +55,11 @@ export const authLoginAsync = userData => {
 
 // LOGOUT
 
-const authLogout = () => {
-    return { type: AT.AUTH_LOGOUT }
-}
+const authLogout = () => { return { type: AT.AUTH_LOGOUT } }
 
-const authLogoutSuccess = () => {
-    return { type: AT.AUTH_LOGOUT_SUCCESS }
-}
+const authLogoutSuccess = () => { return { type: AT.AUTH_LOGOUT_SUCCESS } }
 
-const authLogoutError = error => {
-    return { type: AT.AUTH_LOGOUT_ERROR, error }
-}
+const authLogoutError = error => { return { type: AT.AUTH_LOGOUT_ERROR, error } }
 
 export const authLogoutAsync = userData => {
     return async dispatch => {
@@ -99,17 +79,11 @@ export const authLogoutAsync = userData => {
 
 // Is Logged In?
 
-const authIsLoggedIn = () => {
-    return { type: AT.AUTH_IS_LOGGED_IN }
-}
+const authIsLoggedIn = () => { return { type: AT.AUTH_IS_LOGGED_IN } }
 
-const authIsLoggedInSuccess = () => {
-    return { type: AT.AUTH_IS_LOGGED_IN_SUCCESS }
-}
+const authIsLoggedInSuccess = userData => { return { type: AT.AUTH_IS_LOGGED_IN_SUCCESS, userId: userData.userId, fridgeId: userData.fridgeId } }
 
-const authIsLoggedInError = () => {
-    return { type: AT.AUTH_IS_LOGGED_IN_ERROR }
-}
+const authIsLoggedInError = () => { return { type: AT.AUTH_IS_LOGGED_IN_ERROR } }
 
 export const authIsLoggedInAsync = () => {
     return async dispatch => {
@@ -117,7 +91,7 @@ export const authIsLoggedInAsync = () => {
         try {
             const response = await axios.get(API_URL + 'check', { withCredentials: true })
             if (response.status === 200) {
-                dispatch(authIsLoggedInSuccess())
+                dispatch(authIsLoggedInSuccess(response.data))
             } else {
                 dispatch(authIsLoggedInError())
             }

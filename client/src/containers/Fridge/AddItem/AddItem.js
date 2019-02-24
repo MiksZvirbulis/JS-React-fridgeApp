@@ -17,6 +17,19 @@ import * as actions from '../../../store/actions'
 class AddItem extends Component {
   state = {
     formData: {
+      fridgeId: {
+        elementType: 'select',
+        elementConfig: {
+          placeholder: 'Select fridge...',
+          options: [
+            ...this.props.fridges
+          ]
+        },
+        validation: {
+          isRequired: true
+        },
+        valid: false
+      },
       name: {
         elementType: 'input',
         elementConfig: {
@@ -80,11 +93,11 @@ class AddItem extends Component {
           type: 'text'
         },
         validation: {
-          minLength: 5,
+          minLength: 0,
           maxLength: 360,
-          isRequired: true
+          isRequired: false
         },
-        valid: false,
+        valid: true,
         value: ''
       },
       open: {
@@ -142,11 +155,29 @@ class AddItem extends Component {
         value
       }
     }
-    const itemData = {
-      ...item
-    }
+    const itemData = { ...item }
     this.props.addFridgeItem(itemData)
   }
+
+  componentWillMount() {
+    this._isMounted = true
+    this.props.getFridges(this.props.userId).then(call => {
+    if (this.props.fridges.length > 0 && this.props.added === false) {
+      const currentForm = { ...this.state.formData }
+      currentForm.fridgeId.elementConfig.options = this.props.fridges
+      if (this._isMounted) {
+        if (this.props.items.length === 0) {
+          this.props.fetchItems(this.props.items, this.props.fridgeId)
+        }
+        this.setState({ formData: currentForm })
+      }
+    }
+    })
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false
+}
 
   render() {
     const formElements = [];
@@ -155,6 +186,12 @@ class AddItem extends Component {
         id: key,
         config: this.state.formData[key]
       });
+    }
+
+    const loadedFridges = { ...this.props.fridges }
+    let fridges = []
+    for (let key in loadedFridges) {
+      fridges.push(<option key={loadedFridges[key].id} value={loadedFridges[key].id}>{loadedFridges[key].title}</option>)
     }
 
     const form = formElements.map(element => (
@@ -169,7 +206,7 @@ class AddItem extends Component {
     ))
     let renderForm = ''
     if (this.props.added) {
-      renderForm = <Redirect to="/" />
+      return <Redirect to="/" />
     } else {
       renderForm = (
         <div>
@@ -181,7 +218,7 @@ class AddItem extends Component {
           </form>
         </div>
       )
-    }
+  }
     return renderForm
   }
 }
@@ -190,13 +227,20 @@ const mapStateToProps = state => {
   return {
     types: state.fridge.types.map(type => { return {value: type, display: type.charAt(0).toUpperCase() + type.slice(1)} }),
     error: state.fridge.error,
-    added: state.fridge.added
+    added: state.fridge.added,
+    fridgeId: state.auth.fridgeId,
+    fridges: state.fridge.fridges,
+    userId: state.auth.userId,
+    items: state.fridge.items,
+    loading: state.fridge.loading
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
-    addFridgeItem: (item) => dispatch(actions.addFridgeItemsAsync(item))
+    addFridgeItem: (item) => dispatch(actions.addFridgeItemsAsync(item)),
+    getFridges: userId => dispatch(actions.getFridgesAsync(userId)),
+    fetchItems: (loadedItems, fridgeId) => dispatch(actions.fetchFridgeItemsAsync(loadedItems, false, false, false, fridgeId))
   }
 }
 

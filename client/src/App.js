@@ -17,10 +17,11 @@ import Logout from './containers/Auth/Logout'
 import Signup from './containers/Auth/Signup'
 import AddItem from './containers/Fridge/AddItem/AddItem'
 import EditItem from './containers/Fridge/EditItem/EditItem'
+import Access from './containers/Fridge/Access/Access'
 
 class App extends PureComponent {
 
-  componentDidMount() {
+  componentWillMount() {
     this.props.isLoggedIn()
   }
 
@@ -30,10 +31,11 @@ class App extends PureComponent {
       <Switch>
       <Route path="/signup" component={Signup} />
       <Route path="/login" component={Auth} />
-      <Route path="/logout" component={Logout} />
-      <Route exact path="/" component={withAuth(Fridge, this.props.loggedIn)} />
-      <Route path="/add" component={withAuth(AddItem, this.props.loggedIn)} />
-      <Route path="/edit/:id" component={withAuth(EditItem, this.props.loggedIn)} />
+      <Route path="/logout" component={withAuth(Logout)} />
+      <Route exact path="/" component={withAuth(Fridge)} />
+      <Route path="/add" component={withAuth(AddItem)} />
+      <Route path="/access" component={withAuth(Access)} />
+      <Route path="/edit/:id" component={withAuth(EditItem)} />
       </Switch>
       </Layout>
     )

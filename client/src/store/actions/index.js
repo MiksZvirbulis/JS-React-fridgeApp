@@ -3,7 +3,11 @@ export {
   addFridgeItemsAsync,
   fetchFridgeItemAsync,
   updateFridgeItemAsync,
-  deleteFridgeItemAsync
+  deleteFridgeItemAsync,
+  getUserAccessAsync,
+  giveUserAccessAsync,
+  getFridgesAsync,
+  resetLogout
 } from './fridge'
 export {
   authSignupAsync,

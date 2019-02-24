@@ -11,6 +11,7 @@ const Navigation = props => (
       <NavigationItem link="/" logo><img src={Logo} alt="Fridge Logo" /></NavigationItem>
       {props.loggedIn ? <NavigationItem path="/">Fridge</NavigationItem> : null}
       {props.loggedIn ? <NavigationItem path="/add">Add Ingredient</NavigationItem> : null}
+      {props.loggedIn ? <NavigationItem path="/access">Access</NavigationItem> : null}
       {!props.loggedIn ? <NavigationItem path="/signup">Signup</NavigationItem> : null}
       {!props.loggedIn ? <NavigationItem path="/login">Login</NavigationItem> : <NavigationItem path="/logout">Logout</NavigationItem>}
     </ul>

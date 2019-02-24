@@ -7,8 +7,9 @@ class Logout extends Component {
 
     state = { redirect: false }
 
-    componentDidMount() {
+    componentWillMount() {
         if (this.props.loggedIn) {
+            this.props.resetLogout()
             this.props.logout()
         }
         this.setState({ redirect: true })
@@ -27,7 +28,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        logout: () => dispatch(actions.authLogoutAsync())
+        logout: () => dispatch(actions.authLogoutAsync()),
+        resetLogout: () => dispatch(actions.resetLogout())
     }
 }
 

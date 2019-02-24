@@ -77,7 +77,7 @@ class Auth extends Component {
 
     render() {
       if (this.props.loggedIn) {
-        return <Redirect to="/" />
+        return <Redirect push to="/" />
       }
         const formElements = [];
         for (let key in this.state.formData) {

@@ -11,7 +11,15 @@ const withAuth = function(req, res, next) {
         res.status(202).send('Unauthorized: Invalid token')
       } else {
         req.username = decoded.username
-        next()
+        connection.query("SELECT u.id AS uId, f.id AS fId FROM users u LEFT JOIN fridges f ON f.user_id = u.id WHERE `username` = ?", [req.username], (findUserError, findUserResult) => {
+          if (findUserError) {
+            console.log(findUserError)
+          } else {
+            req.userId = findUserResult[0].uId
+            req.fridgeId = findUserResult[0].fId
+            next()
+          }
+        })
       }
     })
   }

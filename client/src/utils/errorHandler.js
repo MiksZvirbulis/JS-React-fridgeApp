@@ -15,6 +15,16 @@ const errorHandler = error => {
     return 'There was an error while signing you up'
     case 'USERNAME_TAKEN':
     return 'The username is already taken'
+    case 'USER_NOT_FOUND':
+    return 'User was not found'
+    case 'USER_HAS_ACCESS':
+    return 'User already has access to your fridge'
+    case 'LOGIN_FAILED':
+    return 'Username or password provided is incorrect'
+    case 'NO_USER_HAS_ACCESS':
+    return 'No users have access to your fridge'
+    case 'ONLY_ONE_ITEM':
+    return 'You may not leave an empty fridge, add another item to delete this item'
     default:
     return error
   }
