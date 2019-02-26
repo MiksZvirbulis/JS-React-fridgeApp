@@ -7,7 +7,7 @@ const withAccess = async function(req, res, next) {
     let pathMethod = req.method
     pathType.pop()
     pathType.shift()
-
+    
     if (pathType[0] === 'fridge') {
       // Is the method GET and requesting a list of all items in a fridge?
         if (pathMethod === 'GET' && pathType[1] === 'items') {
