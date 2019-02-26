@@ -69,19 +69,14 @@ cd client && npm start
 * CSS3
 
 ## Screenshots
-* https://prntscr.com/llsjaj
-* https://prntscr.com/llsj7v
-* https://prntscr.com/llsiz5
-* https://prntscr.com/llsivv
-* https://prntscr.com/llsio2
-* https://prntscr.com/llsinz
-* https://prntscr.com/llsiny
-* https://prntscr.com/llsinx
-* https://prntscr.com/llsint
+* http://prntscr.com/mpfj6q - Login page
+* http://prntscr.com/mpfjah - Signup page
+* http://prntscr.com/mpfjwb - Home/Fridge page with all fridge items
+* http://prntscr.com/mpfk2j - Editing item
+* http://prntscr.com/mpfk6u - Adding item
+* http://prntscr.com/mpfkbs - Give users access page
 
 ## Coming Soon
-<<<<<<< HEAD
-* Unique fridge and family fridge grouping
-=======
-* Unique fridge and family fridge grouping
->>>>>>> f3dfcf8e09a50619f55b95e42b289c28b958db26
+
+* API Access Middleware
+* General Improvements
