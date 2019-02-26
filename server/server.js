@@ -40,12 +40,13 @@ router.use((req, res, next) => {
 });
 
 // Requiring utilities & middleware
-dataValidation = require('./dataValidation')
-const withAuth = require('./withAuth')
+dataValidation = require('./utils/dataValidation')
+const withAuth = require('./middleware/withAuth')
+const withAccess = require('./middleware/withAccess')
 
 //FRIDGE ROUTES
 // GET request for fridge items with ID specified
-router.get('/fridge/items/:id', withAuth, fridge.list)
+router.get('/fridge/items/:id', withAuth, withAccess, fridge.list)
 // GET request for a specific fridge item
 router.get('/fridge/:id', withAuth, fridge.item)
 // PUT request to update a specific fridge item

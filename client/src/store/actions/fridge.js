@@ -56,8 +56,8 @@ const fetchFridgeItemsError = error => { return { type: AT.FRIDGE_FETCH_ITEMS_ER
 
 export const fetchFridgeItemsAsync = (loadedItems, foundItems, action = false, actionValue, fridgeId) => {
   return async dispatch => {
-    dispatch(fetchFridgeItems());
-    if (loadedItems.length === 0) {
+    dispatch(fetchFridgeItems())
+    if (loadedItems.length === 0 && fridgeId !== undefined) {
       try {
         const response = await axios.get(API_URL + 'items/' + fridgeId)
         if (response.status === 202) {

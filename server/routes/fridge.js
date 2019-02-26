@@ -202,12 +202,6 @@ exports.getAccess = (req, res) => {
 // Give a specified user access to a new fridge
 
 exports.giveAccess = (req, res) => {
-    // TEST QUERY IGNORE - query which eventually will allow to see if user with a specific id has access to fridge, probably will use mysql JSON_CONTAINS anyways...
-    connection.query('SELECT `user_access` FROM `fridges` WHERE `id` = ?', [1], (err, fridge) => {
-        const userAccess = JSON.parse(fridge[0].user_access)
-        // console.log(userAccess.findIndex(id => id === 2))
-    })
-    // TEST QUERY IGNORE
     // Request body should receive user.username and user.userId
     const user = { ...req.body }
     // Query to find user in the database with username provided

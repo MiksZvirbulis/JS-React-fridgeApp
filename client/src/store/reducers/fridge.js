@@ -100,7 +100,7 @@ export default function fridge(state = initialState, action) {
     return updateObject(state, { loading: false, error: action.error })
     // Get Fridges With Access
     case AT.FRIDGES_WITH_ACCESS:
-    return updateObject(state, { loading: true, error: null } )
+    return updateObject(state, { loading: true, error: null, deleted: false, added: false } )
     case AT.FRIDGES_WITH_ACCESS_SUCCESS:
     return updateObject(state, { loading: false, error: null, fridges: action.fridges } )
     case AT.FRIDGES_WITH_ACCESS_ERROR:
