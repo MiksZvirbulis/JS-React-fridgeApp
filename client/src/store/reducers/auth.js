@@ -37,7 +37,7 @@ export default function auth(state = initialState, action) {
         case AT.AUTH_IS_LOGGED_IN:
         return updateObject(state, { error: null, loggedIn: false, userId: null, fridgeId: null, newLogin: false })
         case AT.AUTH_IS_LOGGED_IN_SUCCESS:
-        return updateObject(state, { loggedIn: true, userId: action.userId, fridgeId: action.fridgeId })
+        return updateObject(state, { loggedIn: true, userId: action.userId, fridgeId: action.fridgeId, error: null })
         case AT.AUTH_IS_LOGGED_IN_ERROR:
         return updateObject(state, { loggedIn: false, userId: null, fridgeId: null })
         default:

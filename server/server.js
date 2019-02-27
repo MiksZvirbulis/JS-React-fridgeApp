@@ -48,17 +48,17 @@ const withAccess = require('./middleware/withAccess')
 // GET request for fridge items with ID specified
 router.get('/fridge/items/:id', withAuth, withAccess, fridge.list)
 // GET request for a specific fridge item
-router.get('/fridge/:id', withAuth, fridge.item)
+router.get('/fridge/item/:id', withAuth, withAccess, fridge.item)
 // PUT request to update a specific fridge item
-router.put('/fridge/:id', withAuth, fridge.updateItem)
+router.put('/fridge/item/:id', withAuth, withAccess, fridge.updateItem)
 // POST request to add a new fridge item
-router.post('/fridge', withAuth, fridge.addItem)
+router.post('/fridge/item', withAuth, withAccess, fridge.addItem)
 // POST request to delete a specific fridge item
-router.post('/fridge/delete/:id', withAuth, fridge.deleteItem)
+router.delete('/fridge/item/:id', withAuth, withAccess, fridge.deleteItem)
 // GET request to find all users with access to user's fridge
-router.get('/fridge/access/:id', withAuth, fridge.getAccess)
+router.get('/fridge/access/:id', withAuth, withAccess, fridge.getAccess)
 // POST request to give fridge access to specified user
-router.post('/fridge/access', withAuth, fridge.giveAccess)
+router.post('/fridge/access', withAuth, withAccess, fridge.giveAccess)
 // GET all fridges which user has access to
 router.get('/fridge/all/:id', withAuth, fridge.getFridges)
 

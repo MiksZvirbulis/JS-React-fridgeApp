@@ -2,7 +2,7 @@ import * as AT from '../actionTypes'
 import axios from 'axios'
 import compareAndSort from '../../utils/compareAndSort'
 
-const API_URL = '/api/fridge/'
+const API_URL = '/api/fridge'
 
 // Receiving all Fridge Items
 
@@ -59,7 +59,7 @@ export const fetchFridgeItemsAsync = (loadedItems, foundItems, action = false, a
     dispatch(fetchFridgeItems())
     if (loadedItems.length === 0 && fridgeId !== undefined) {
       try {
-        const response = await axios.get(API_URL + 'items/' + fridgeId)
+        const response = await axios.get(API_URL + '/items/' + fridgeId)
         if (response.status === 202) {
           dispatch(fetchFridgeItemsError(response.data))
         } else {
@@ -87,7 +87,7 @@ export const addFridgeItemsAsync = item => {
     dispatch(addFridgeItems());
     dispatch(fetchFridgeItemsAsync([], [], false, false));
     try {
-      const response = await axios.post(API_URL, item)
+      const response = await axios.post(API_URL + '/item', item)
       if (typeof response.data === 'object' && response.data !== null) {
         dispatch(addFridgeItemsSuccess(item, response.data.itemId))
       } else {
@@ -111,7 +111,7 @@ export const fetchFridgeItemAsync = itemId => {
   return async dispatch => {
     dispatch(fetchFridgeItem());
     try {
-      const response = await axios.get(API_URL + itemId)
+      const response = await axios.get(API_URL + '/item/' + itemId)
       if (typeof response.data === 'object') {
         dispatch(fetchFridgeItemSuccess(response.data))
       } else {
@@ -135,7 +135,7 @@ export const updateFridgeItemAsync = (itemId, newData) => {
   return async dispatch => {
     dispatch(updateFridgeItem());
     try {
-      const response = await axios.put(API_URL + itemId, newData)
+      const response = await axios.put(API_URL + '/item/' + itemId, newData)
       if (response.data === 'SUCCESS') {
         dispatch(updateFridgeItemSuccess(itemId, newData))
       } else {
@@ -159,7 +159,7 @@ export const deleteFridgeItemAsync = itemId => {
   return async dispatch => {
     dispatch(deleteFridgeItem());
     try {
-      const response = await axios.post(API_URL + 'delete/' + itemId)
+      const response = await axios.delete(API_URL + '/item/' + itemId)
       if (response.data === 'SUCCESS') {
         dispatch(deleteFridgeItemSuccess(itemId))
       } else {
@@ -183,7 +183,7 @@ export const getUserAccessAsync = userId => {
   return async dispatch => {
     dispatch(getUserAccess());
     try {
-      const response = await axios.get(API_URL + 'access/' + userId)
+      const response = await axios.get(API_URL + '/access/' + userId)
       if (response.status === 200) {
         dispatch(getUserAccessSuccess(response.data))
       } else {
@@ -207,7 +207,7 @@ export const giveUserAccessAsync = user => {
   return async dispatch => {
     dispatch(giveUserAccess());
     try {
-      const response = await axios.post(API_URL + 'access/', { userId: user.userId, username: user.username })
+      const response = await axios.post(API_URL + '/access/', { userId: user.userId, username: user.username })
       if (response.status === 200) {
         dispatch(giveUserAccessSuccess(response.data))
         dispatch(getUserAccessAsync(user.userId))
@@ -232,7 +232,7 @@ export const getFridgesAsync = userId => {
   return async dispatch => {
     dispatch(getFridges());
     try {
-      const response = await axios.get(API_URL + 'all/' + userId)
+      const response = await axios.get(API_URL + '/all/' + userId)
       if (response.status === 200) {
         dispatch(getFridgesSuccess(response.data))
       } else {

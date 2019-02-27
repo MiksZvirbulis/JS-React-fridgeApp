@@ -1,7 +1,7 @@
 import * as AT from '../actionTypes'
 import axios from 'axios'
 
-const API_URL = '/api/auth/'
+const API_URL = '/api/auth'
 
 // SIGNUP
 
@@ -41,7 +41,7 @@ export const authLoginAsync = userData => {
     return async dispatch => {
         dispatch(authLogin());
         try {
-            const response = await axios.post(API_URL + 'login', userData)
+            const response = await axios.post(API_URL + '/login', userData)
             if (response.status === 200) {
                 dispatch(authLoginSuccess(response.data))
             } else {
@@ -65,7 +65,7 @@ export const authLogoutAsync = userData => {
     return async dispatch => {
         dispatch(authLogout());
         try {
-            const response = await axios.post(API_URL + 'logout', userData)
+            const response = await axios.post(API_URL + '/logout', userData)
             if (response.status === 200) {
                 dispatch(authLogoutSuccess())
             } else {
@@ -89,7 +89,7 @@ export const authIsLoggedInAsync = () => {
     return async dispatch => {
         dispatch(authIsLoggedIn());
         try {
-            const response = await axios.get(API_URL + 'check', { withCredentials: true })
+            const response = await axios.get(API_URL + '/check', { withCredentials: true })
             if (response.status === 200) {
                 dispatch(authIsLoggedInSuccess(response.data))
             } else {

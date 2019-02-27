@@ -92,7 +92,6 @@ exports.updateItem = (req, res) => {
 }
 
 // Post a new item
-
 exports.addItem = (req, res) => {
     // Check validation of item received in the body of the request
     const receivedItem = { ...req.body }
