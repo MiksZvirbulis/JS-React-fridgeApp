@@ -207,7 +207,7 @@ export const giveUserAccessAsync = user => {
   return async dispatch => {
     dispatch(giveUserAccess());
     try {
-      const response = await axios.post(API_URL + '/access/', { userId: user.userId, username: user.username })
+      const response = await axios.post(API_URL + '/access/', { userId: user.userId, username: user.username, fridgeId: user.fridgeId })
       if (response.status === 200) {
         dispatch(giveUserAccessSuccess(response.data))
         dispatch(getUserAccessAsync(user.userId))

@@ -23,6 +23,8 @@ const errorHandler = error => {
     return 'Username or password provided is incorrect'
     case 'NO_USER_HAS_ACCESS':
     return 'No users have access to your fridge'
+    case 'USER_HAS_NO_ACCESS':
+    return 'User does not have access to your fridge'
     case 'ONLY_ONE_ITEM':
     return 'You may not leave an empty fridge, add another item to delete this item'
     default:

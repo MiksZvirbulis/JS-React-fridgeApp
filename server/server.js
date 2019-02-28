@@ -53,10 +53,12 @@ router.get('/fridge/item/:id', withAuth, withAccess, fridge.item)
 router.put('/fridge/item/:id', withAuth, withAccess, fridge.updateItem)
 // POST request to add a new fridge item
 router.post('/fridge/item', withAuth, withAccess, fridge.addItem)
-// POST request to delete a specific fridge item
+// DELETE request to delete a specific fridge item
 router.delete('/fridge/item/:id', withAuth, withAccess, fridge.deleteItem)
 // GET request to find all users with access to user's fridge
 router.get('/fridge/access/:id', withAuth, withAccess, fridge.getAccess)
+// DELETE request to remove fridge access to specified user
+router.delete('/fridge/access/:id', withAuth, withAccess, fridge.deleteAccess)
 // POST request to give fridge access to specified user
 router.post('/fridge/access', withAuth, withAccess, fridge.giveAccess)
 // GET all fridges which user has access to

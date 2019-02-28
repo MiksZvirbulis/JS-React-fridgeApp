@@ -60,7 +60,7 @@ class Access extends Component {
     event.preventDefault()
     const username = this.state.formData.username.value
     if (this.props.users.findIndex(user => { return user === username } ) === -1) {
-      this.props.giveUserAccess({ userId: this.props.userId, username })
+      this.props.giveUserAccess({ userId: this.props.userId, username, fridgeId: this.props.fridgeId })
       this.setState({ error: null })
     } else {
       this.setState({ error: username + ' already has access to your fridge!' })
@@ -106,7 +106,8 @@ const mapStateToProps = state => {
   return {
     error: state.fridge.error,
     userId: state.auth.userId,
-    users: state.fridge.usersWithAccess
+    users: state.fridge.usersWithAccess,
+    fridgeId: state.auth.fridgeId
   }
 }
 

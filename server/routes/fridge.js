@@ -210,8 +210,33 @@ exports.giveAccess = (req, res) => {
             // Query that adds the specified user ID to the access array in the database
             connection.query("UPDATE `fridges` SET `user_access` = JSON_ARRAY_APPEND(`user_access`, '$', ?) WHERE `user_id` = ? AND NOT JSON_CONTAINS(`user_access`, '?')", [findUserResult[0].id, user.userId, findUserResult[0].id], (updateAccessError, updateAccessResult) => {
                 if (updateAccessError) {
-                    // Testing if the user already has access is included in the query, this is just to send for error handling if query fails
+                    // Testing if the user already has access is. This is just to send for error handling if query fails
                     res.status(202).send('USER_HAS_ACCESS')
+                } else {
+                    res.status(200).send('SUCCESS')
+                }
+            })
+        } else {
+            // If a user was not found, sending for error handling
+            res.status(202).send('USER_NOT_FOUND')
+        }
+    })
+}
+
+// Give a specified user access to a new fridge
+
+exports.deleteAccess = (req, res) => {
+    // Request body should receive user.username and user.userId
+    const user = { ...req.body }
+    // Query to find user in the database with username provided
+    connection.query("SELECT `id` FROM `users` WHERE `username` = ?", [user.username], (findUserError, findUserResult) => {
+        // If a user was found
+        if (findUserResult.length > 0) {
+            // Query that adds the specified user ID to the access array in the database
+            connection.query("UPDATE `fridges` SET `user_access` = JSON_REMOVE(`user_access`, '$', ?) WHERE `user_id` = ? AND JSON_CONTAINS(`user_access`, '?')", [findUserResult[0].id, user.userId, findUserResult[0].id], (updateAccessError, updateAccessResult) => {
+                if (updateAccessError) {
+                    // Testing if the actually user has access is. This is just to send for error handling if query fails
+                    res.status(202).send('USER_HAS_NO_ACCESS')
                 } else {
                     res.status(200).send('SUCCESS')
                 }
