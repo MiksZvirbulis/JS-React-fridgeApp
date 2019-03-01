@@ -98,6 +98,13 @@ export default function fridge(state = initialState, action) {
     return updateObject(state, { loading: false, error: null } )
     case AT.GIVE_USER_ACCESS_ERROR:
     return updateObject(state, { loading: false, error: action.error })
+    // Delete User Access
+    case AT.DELETE_USER_ACCESS:
+    return updateObject(state, { loading: true, error: null } )
+    case AT.DELETE_USER_ACCESS_SUCCESS:
+    return updateObject(state, { loading: false, error: null } )
+    case AT.DELETE_USER_ACCESS_ERROR:
+    return updateObject(state, { loading: false, error: action.error })
     // Get Fridges With Access
     case AT.FRIDGES_WITH_ACCESS:
     return updateObject(state, { loading: true, error: null, deleted: false, added: false } )

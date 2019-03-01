@@ -6,6 +6,7 @@ export {
   deleteFridgeItemAsync,
   getUserAccessAsync,
   giveUserAccessAsync,
+  deleteUserAccessAsync,
   getFridgesAsync,
   resetLogout
 } from './fridge'

@@ -58,7 +58,7 @@ const withAccess = async function(req, res, next) {
 
           // Handling routes for posting new item and giving access to fridge
 
-        } else if (pathMethod === 'POST' && (rawPath[2] === 'item' || rawPath[2] === 'access')) {
+        } else if (pathMethod === 'POST' && (rawPath[2] === 'item' || rawPath[2] === 'access' || rawPath[2] === 'deleteAccess')) {
           let fridgeId = null
           // Data received in the body
           const receivedData = { ...req.body }

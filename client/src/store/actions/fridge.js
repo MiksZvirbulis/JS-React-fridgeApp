@@ -220,6 +220,31 @@ export const giveUserAccessAsync = user => {
   }
 }
 
+// Give user access
+
+const deleteUserAccess = () => { return { type: AT.DELETE_USER_ACCESS } }
+
+const deleteUserAccessSuccess = () => { return { type: AT.DELETE_USER_ACCESS_SUCCESS } }
+
+const deleteUserAccessError = error => { return { type: AT.DELETE_USER_ACCESS_ERROR, error } }
+
+export const deleteUserAccessAsync = user => {
+  return async dispatch => {
+    dispatch(deleteUserAccess());
+    try {
+      const response = await axios.post(API_URL + '/deleteAccess/', { userId: user.userId, username: user.username, fridgeId: user.fridgeId })
+      if (response.status === 200) {
+        dispatch(deleteUserAccessSuccess(response.data))
+        dispatch(getUserAccessAsync(user.userId))
+      } else {
+        dispatch(deleteUserAccessError(response.data))
+      }
+    } catch (error) {
+      dispatch(deleteUserAccessError(error.message))
+    }
+  }
+}
+
 // Getting fridges which user has access to
 
 const getFridges = () => { return { type: AT.FRIDGES_WITH_ACCESS } }

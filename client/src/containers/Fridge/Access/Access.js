@@ -56,7 +56,7 @@ class Access extends Component {
     this.setState({ formData: updatedForm, formValid: formValid })
   }
 
-  handleSubmit = (event) => {
+  handleSubmit = event => {
     event.preventDefault()
     const username = this.state.formData.username.value
     if (this.props.users.findIndex(user => { return user === username } ) === -1) {
@@ -65,6 +65,10 @@ class Access extends Component {
     } else {
       this.setState({ error: username + ' already has access to your fridge!' })
     }
+  }
+
+  handleDelete = username => {
+    this.props.deleteUserAccess({ userId: this.props.userId, username, fridgeId: this.props.fridgeId })
   }
 
   render() {
@@ -86,7 +90,9 @@ class Access extends Component {
         changed={(event) => this.handleChange(event, element.id)}
         />
     ))
-    let usersWithAccess = this.props.users.join(", ")
+    let usersWithAccess = this.props.users.map(username => {
+      return <span key={username} style={{ cursor: 'pointer' }} onClick={() => this.handleDelete(username)}>{username} </span>
+    })
     return (
       <div>
         <h1>Add Access to Your Fridge</h1>
@@ -114,7 +120,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     getUserAccess: userId => dispatch(actions.getUserAccessAsync(userId)),
-    giveUserAccess: user => dispatch(actions.giveUserAccessAsync(user))
+    giveUserAccess: user => dispatch(actions.giveUserAccessAsync(user)),
+    deleteUserAccess: user => dispatch(actions.deleteUserAccessAsync(user))
   }
 }
 
