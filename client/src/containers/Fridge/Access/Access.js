@@ -34,7 +34,7 @@ class Access extends Component {
 
   componentWillMount() {
     if (this.props.userId !== null) {
-      this.props.getUserAccess(this.props.userId)
+      this.props.getUserAccess(this.props.fridgeId)
     }
   }
 

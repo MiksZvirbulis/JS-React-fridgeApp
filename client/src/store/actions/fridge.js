@@ -179,11 +179,11 @@ const getUserAccessSuccess = users => { return { type: AT.USER_ACCESS_SUCCESS, u
 
 const getUserAccessError = error => { return { type: AT.USER_ACCESS_ERROR, error } }
 
-export const getUserAccessAsync = userId => {
+export const getUserAccessAsync = fridgeId => {
   return async dispatch => {
     dispatch(getUserAccess());
     try {
-      const response = await axios.get(API_URL + '/access/' + userId)
+      const response = await axios.get(API_URL + '/access/' + fridgeId)
       if (response.status === 200) {
         dispatch(getUserAccessSuccess(response.data))
       } else {
@@ -210,7 +210,7 @@ export const giveUserAccessAsync = user => {
       const response = await axios.post(API_URL + '/access/', { userId: user.userId, username: user.username, fridgeId: user.fridgeId })
       if (response.status === 200) {
         dispatch(giveUserAccessSuccess(response.data))
-        dispatch(getUserAccessAsync(user.userId))
+        dispatch(getUserAccessAsync(user.fridgeId))
       } else {
         dispatch(giveUserAccessError(response.data))
       }
@@ -235,7 +235,7 @@ export const deleteUserAccessAsync = user => {
       const response = await axios.post(API_URL + '/deleteAccess/', { userId: user.userId, username: user.username, fridgeId: user.fridgeId })
       if (response.status === 200) {
         dispatch(deleteUserAccessSuccess(response.data))
-        dispatch(getUserAccessAsync(user.userId))
+        dispatch(getUserAccessAsync(user.fridgeId))
       } else {
         dispatch(deleteUserAccessError(response.data))
       }

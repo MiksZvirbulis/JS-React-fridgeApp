@@ -176,7 +176,7 @@ exports.deleteItem = (req, res) => {
 
 exports.getAccess = (req, res) => {
     // Query to select username's of users who have access to another user's fridge
-    connection.query('SELECT u.username, u.id, f.user_access, f.user_id FROM users u LEFT JOIN fridges f ON JSON_CONTAINS(f.user_access, CAST(u.id as JSON), ?) WHERE f.user_id = ?', ['$', req.params.id], (error, users) => {
+    connection.query('SELECT u.username, u.id, f.user_access, f.user_id FROM users u LEFT JOIN fridges f ON JSON_CONTAINS(f.user_access, CAST(u.id as JSON), ?) WHERE f.id = ?', ['$', req.params.id], (error, users) => {
         if (error) {
             // Send for error handling if query failed
             res.status(202).send('READING_ERROR')
@@ -233,7 +233,11 @@ exports.deleteAccess = (req, res) => {
         // If a user was found
         if (findUserResult.length > 0 && (findUserResult[0].id !== user.userId)) {
             // Query that adds the specified user ID to the access array in the database
-            connection.query("UPDATE `fridges` SET `user_access` = JSON_SET(`user_access`, '$', ?) WHERE `user_id` = ? AND JSON_CONTAINS(`user_access`, '?')", [findUserResult[0].id, user.userId, findUserResult[0].id], (updateAccessError, updateAccessResult) => {
+            connection.query("UPDATE `fridges` SET `user_access` = JSON_REMOVE(user_access, JSON_UNQUOTE(JSON_SEARCH(user_access, 'one', ?))) WHERE `user_id` = ? AND JSON_SEARCH(user_access, 'one', ?) IS NOT NULL", [
+                findUserResult[0].id,
+                user.userId,
+                findUserResult[0].id
+            ], (updateAccessError, updateAccessResult) => {
                 if (updateAccessError) {
                     console.log(updateAccessError)
                     // Testing if the actually user has access is. This is just to send for error handling if query fails
@@ -242,6 +246,9 @@ exports.deleteAccess = (req, res) => {
                     res.status(200).send('SUCCESS')
                 }
             })
+        } else if (findUserResult[0].id === user.userId) {
+            // If a user is deleting himself, sending for error handling
+            res.status(202).send('DELETE_ONLY_OTHERS')
         } else {
             // If a user was not found, sending for error handling
             res.status(202).send('USER_NOT_FOUND')

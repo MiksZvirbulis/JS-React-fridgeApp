@@ -27,6 +27,8 @@ const errorHandler = error => {
     return 'User does not have access to your fridge'
     case 'ONLY_ONE_ITEM':
     return 'You may not leave an empty fridge, add another item to delete this item'
+    case 'DELETE_ONLY_OTHERS':
+    return 'You can\'t delete yourself from having access'
     default:
     return error
   }
