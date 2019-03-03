@@ -231,7 +231,7 @@ exports.deleteAccess = (req, res) => {
     // Query to find user in the database with username provided
     connection.query("SELECT u.id, f.user_access FROM users u LEFT JOIN fridges f ON f.user_id = ? WHERE username = ?", [user.userId, user.username], (findUserError, findUserResult) => {
         // If a user was found
-        if ((findUserResult.length > 0 && (findUserResult[0].id !== user.userId)) || findUserError) {
+        if (findUserResult.length > 0 && (findUserResult[0].id !== user.userId) && !findUserError) {
            // Parsing user_access cell to as JSON array
             let userAccess = JSON.parse(findUserResult[0].user_access)
             // Finding index of userId to be removed from userAccess array
