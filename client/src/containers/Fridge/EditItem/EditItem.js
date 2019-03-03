@@ -109,7 +109,7 @@ class EditItem extends Component {
     deleted: false
   }
 
-  componentDidMount() {
+  componentWillMount() {
     this._isMounted = true
     if (this.props.item.length === 0) {
     Promise.resolve(this.props.fetchItem(this.props.match.params.id))

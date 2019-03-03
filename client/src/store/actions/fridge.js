@@ -199,7 +199,7 @@ export const getUserAccessAsync = fridgeId => {
 
 const giveUserAccess = () => { return { type: AT.GIVE_USER_ACCESS } }
 
-const giveUserAccessSuccess = () => { return { type: AT.GIVE_USER_ACCESS_SUCCESS } }
+const giveUserAccessSuccess = username => { return { type: AT.GIVE_USER_ACCESS_SUCCESS, username } }
 
 const giveUserAccessError = error => { return { type: AT.GIVE_USER_ACCESS_ERROR, error } }
 
@@ -209,8 +209,7 @@ export const giveUserAccessAsync = user => {
     try {
       const response = await axios.post(API_URL + '/access/', { userId: user.userId, username: user.username, fridgeId: user.fridgeId })
       if (response.status === 200) {
-        dispatch(giveUserAccessSuccess(response.data))
-        dispatch(getUserAccessAsync(user.fridgeId))
+        dispatch(giveUserAccessSuccess(user.username))
       } else {
         dispatch(giveUserAccessError(response.data))
       }
@@ -224,7 +223,7 @@ export const giveUserAccessAsync = user => {
 
 const deleteUserAccess = () => { return { type: AT.DELETE_USER_ACCESS } }
 
-const deleteUserAccessSuccess = () => { return { type: AT.DELETE_USER_ACCESS_SUCCESS } }
+const deleteUserAccessSuccess = username => { return { type: AT.DELETE_USER_ACCESS_SUCCESS, username } }
 
 const deleteUserAccessError = error => { return { type: AT.DELETE_USER_ACCESS_ERROR, error } }
 
@@ -234,8 +233,7 @@ export const deleteUserAccessAsync = user => {
     try {
       const response = await axios.post(API_URL + '/deleteAccess/', { userId: user.userId, username: user.username, fridgeId: user.fridgeId })
       if (response.status === 200) {
-        dispatch(deleteUserAccessSuccess(response.data))
-        dispatch(getUserAccessAsync(user.fridgeId))
+        dispatch(deleteUserAccessSuccess(user.username))
       } else {
         dispatch(deleteUserAccessError(response.data))
       }

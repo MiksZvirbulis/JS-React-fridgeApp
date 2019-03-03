@@ -161,7 +161,7 @@ class AddItem extends Component {
 
   componentWillMount() {
     this._isMounted = true
-    this.props.getFridges(this.props.userId).then(call => {
+    this.props.getFridges(this.props.fridgeId).then(call => {
     if (this.props.fridges.length > 0 && this.props.added === false) {
       const currentForm = { ...this.state.formData }
       currentForm.fridgeId.elementConfig.options = this.props.fridges

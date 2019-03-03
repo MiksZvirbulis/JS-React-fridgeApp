@@ -14,7 +14,7 @@ class Fridge extends Component {
         const fridgeId = (this.props.openFridgeId !== null && this.props.openFridgeId !== this.props.fridgeId) ? this.props.openFridgeId : this.props.fridgeId
         this.props.fetchItems(this.props.items, fridgeId)
       }
-      this.props.getFridges(this.props.userId)
+      this.props.getFridges(this.props.fridgeId)
     }
   }
 

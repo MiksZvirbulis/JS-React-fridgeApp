@@ -189,7 +189,7 @@ exports.getAccess = (req, res) => {
                 // Create array for users with access
                 let usersWithAccess = []
                 for (let key in users) {
-                    usersWithAccess.push(users[key].username)
+                    usersWithAccess.push({ username: users[key].username })
                 }
                 // Send users with access array as JSON
                 res.status(200).json(usersWithAccess)
@@ -229,17 +229,21 @@ exports.deleteAccess = (req, res) => {
     // Request body should receive user.username and user.userId
     const user = { ...req.body }
     // Query to find user in the database with username provided
-    connection.query("SELECT `id` FROM `users` WHERE `username` = ?", [user.username], (findUserError, findUserResult) => {
+    connection.query("SELECT u.id, f.user_access FROM users u LEFT JOIN fridges f ON f.user_id = ? WHERE username = ?", [user.userId, user.username], (findUserError, findUserResult) => {
         // If a user was found
-        if (findUserResult.length > 0 && (findUserResult[0].id !== user.userId)) {
-            // Query that adds the specified user ID to the access array in the database
-            connection.query("UPDATE `fridges` SET `user_access` = JSON_REMOVE(user_access, JSON_UNQUOTE(JSON_SEARCH(user_access, 'one', ?))) WHERE `user_id` = ? AND JSON_SEARCH(user_access, 'one', ?) IS NOT NULL", [
-                findUserResult[0].id,
-                user.userId,
-                findUserResult[0].id
+        if ((findUserResult.length > 0 && (findUserResult[0].id !== user.userId)) || findUserError) {
+           // Parsing user_access cell to as JSON array
+            let userAccess = JSON.parse(findUserResult[0].user_access)
+            // Finding index of userId to be removed from userAccess array
+            const userAccessIndex = userAccess.findIndex(userId => { return userId === findUserResult[0].id })
+            // Removing userId from userAccess array
+            userAccess.splice(userAccessIndex, 1)
+            // Query that updates user_access for the user's fridge
+            connection.query("UPDATE `fridges` SET `user_access` = ? WHERE `user_id` = ?", [
+                '[' + userAccess + ']',
+                user.userId
             ], (updateAccessError, updateAccessResult) => {
                 if (updateAccessError) {
-                    console.log(updateAccessError)
                     // Testing if the actually user has access is. This is just to send for error handling if query fails
                     res.status(202).send('USER_HAS_NO_ACCESS')
                 } else {

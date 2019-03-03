@@ -68,7 +68,9 @@ class Access extends Component {
   }
 
   handleDelete = username => {
-    this.props.deleteUserAccess({ userId: this.props.userId, username, fridgeId: this.props.fridgeId })
+    if (window.confirm("Are you sure you wish to delete " + username + " from having access?")) {
+      this.props.deleteUserAccess({ userId: this.props.userId, username, fridgeId: this.props.fridgeId })
+    }
   }
 
   render() {
@@ -90,8 +92,8 @@ class Access extends Component {
         changed={(event) => this.handleChange(event, element.id)}
         />
     ))
-    let usersWithAccess = this.props.users.map(username => {
-      return <span key={username} style={{ cursor: 'pointer' }} onClick={() => this.handleDelete(username)}>{username} </span>
+    let usersWithAccess = this.props.users.map(user => {
+      return <span key={user.username} style={{ cursor: 'pointer' }} onClick={() => this.handleDelete(user.username)}>{user.username} </span>
     })
     return (
       <div>

@@ -47,6 +47,19 @@ function deleteItemSuccess(state, itemId) {
   return updateObject(state, { loading: false, foundItems, items, deleted: true })
 }
 
+function giveUserSuccess(state, username) {
+  const usersWithAccess = [ ...state.usersWithAccess ]
+  usersWithAccess.push( { username } )
+  return updateObject(state, { loading: false, error: null, usersWithAccess })
+}
+
+function deleteUserSuccess(state, username) {
+  const usersWithAccess = [ ...state.usersWithAccess ]
+  const userIndex = usersWithAccess.findIndex(user => user.username === username)
+  usersWithAccess.splice(userIndex, 1)
+  return updateObject(state, { loading: false, error: null, usersWithAccess })
+}
+
 export default function fridge(state = initialState, action) {
   switch(action.type) {
     // Fetch Fridge Items
@@ -81,7 +94,7 @@ export default function fridge(state = initialState, action) {
     case AT.FRIDGE_DELETE_ITEM:
     return updateObject(state, { loading: true, item: [], deleted: false, error: null } )
     case AT.FRIDGE_DELETE_ITEM_SUCCESS:
-    return deleteItemSuccess(state, action.itemId)
+    return deleteItemSuccess(state, action.username)
     case AT.FRIDGE_DELETE_ITEM_ERROR:
     return updateObject(state, { loading: false, error: action.error, deleted: false })
     // Get User Access
@@ -95,14 +108,14 @@ export default function fridge(state = initialState, action) {
     case AT.GIVE_USER_ACCESS:
     return updateObject(state, { loading: true, error: null } )
     case AT.GIVE_USER_ACCESS_SUCCESS:
-    return updateObject(state, { loading: false, error: null } )
+    return giveUserSuccess(state, action.username)
     case AT.GIVE_USER_ACCESS_ERROR:
     return updateObject(state, { loading: false, error: action.error })
     // Delete User Access
     case AT.DELETE_USER_ACCESS:
     return updateObject(state, { loading: true, error: null } )
     case AT.DELETE_USER_ACCESS_SUCCESS:
-    return updateObject(state, { loading: false, error: null } )
+    return deleteUserSuccess(state, action.userId)
     case AT.DELETE_USER_ACCESS_ERROR:
     return updateObject(state, { loading: false, error: action.error })
     // Get Fridges With Access

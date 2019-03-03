@@ -37,7 +37,7 @@ exports.signup = (req, res) => {
                                             '500g',
                                             'no_type',
                                             '2018-11-29T00:00:00.000Z',
-                                            'Sample item was branded Tesco, bought for dinner',
+                                            'Sample item is branded Tesco, bought for dinner',
                                             'false',
                                             insertFridgeResult.insertId
                                         ], (insertItemError, insertItemResult) => {
