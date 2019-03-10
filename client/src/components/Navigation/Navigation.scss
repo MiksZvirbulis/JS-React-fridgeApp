@@ -1,17 +1,19 @@
+$bg-color: #32c24d;
+$active-color: #c2325f;
+$white-color: #ffffff;
+
 .Navigation {
   width: 100%;
   position: fixed;
   top: 0;
-  background-color: #32c24d;
+  background-color: $bg-color;
   height: 50px;
-}
 
-.Navigation input#toggle,
-.Navigation label {
+input#toggle, label {
   display: none;
 }
 
-.Navigation ul {
+ul {
   width: 100%;
   margin: 0;
   display: flex;
@@ -19,53 +21,58 @@
   flex-flow: row wrap;
   justify-content: flex-end;
   padding-inline-start: 0;
+
+  li {
+    height: 50px;
+    display: flex;
+  
+    &:hover {
+      background-color: $active-color;
+    }
+
+    &.logo {
+      margin-right: auto;
+    
+      img {
+        width: 42px;
+        height: 42px;
+      }
+
+      a, a.active {
+        background-color: $bg-color;
+      }
+    }
+
+    a {
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      padding: 0 10px;
+      text-decoration: none;
+      color: #fff;
+    
+      &:active {
+        background-color: $active-color;
+      }
+    }
+
+  }
 }
 
-.Navigation ul li {
-  height: 50px;
-  display: flex;
-}
-
-.Navigation ul li.logo {
-  margin-right: auto;
-}
-
-.Navigation ul li.logo a,
-.Navigation ul li.logo a.active {
-  background-color: #32c24d;
-}
-
-.Navigation ul li.logo img {
-  width: 42px;
-  height: 42px;
-}
-
-.Navigation ul li a {
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  padding: 0 10px;
-  text-decoration: none;
-  color: #fff;
-}
-
-.Navigation ul li:hover,
-.Navigation ul li a.active {
-  background-color: #c2325f;
-}
+} // End of nested .Navigation elements
 
 @media screen and (max-width: 768px) {
   .Navigation ul {
     display: none;
     flex-flow: row column;
     align-items: center;
-    background-color: #32c24d;
+    background-color: $bg-color;
   }
 
   .Navigation label {
     display: flex;
     height: 50px;
-    color: #ffffff;
+    color: $white-color;
     text-align: center;
     justify-content: center;
     flex-direction: column;
@@ -82,14 +89,10 @@
     flex-direction: column;
   }
 
-  .Navigation ul li.logo {
-    
-  }
-
   .Navigation input#toggle:checked ~ ul {
     display: flex;
     width: 100%;
     justify-content: center;
-    border-top: 1px solid #fff;
+    border-top: 1px solid $white-color;
   }
 }

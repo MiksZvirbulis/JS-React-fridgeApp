@@ -7,7 +7,7 @@ class Layout extends Component {
   render() {
     return (
       <Aux>
-        <Navigation loggedIn={this.props.loggedIn} />
+        <Navigation />
         <div className="Content">
           {this.props.children}
         </div>

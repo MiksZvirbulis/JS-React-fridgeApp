@@ -27,7 +27,7 @@ class App extends PureComponent {
 
   render() {
     return (
-      <Layout loggedIn={this.props.loggedIn}>
+      <Layout>
       <Switch>
       <Route path="/signup" component={Signup} />
       <Route path="/login" component={Auth} />

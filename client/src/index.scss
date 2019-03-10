@@ -1,3 +1,11 @@
+// Variables
+
+$button-color: #32c24d;
+$white-color: #ffffff;
+$grey-color: #cccccc;
+$input-bg-color: #c2325f;
+$error-color: #d8000c;
+
 html, body {
   margin: 0;
   padding: 0;
@@ -41,8 +49,8 @@ textarea {
   height: 40px;
   text-indent: 5px;
   border-radius: 2px;
-  color: #fff;
-  background-color: #c2325f;
+  color: $white-color;
+  background-color: $input-bg-color;
   border: none;
   width: 100%;
   margin: 10px auto;
@@ -72,7 +80,7 @@ textarea.invalid {
 input::placeholder,
 select::placeholder,
 textarea::placeholder {
-  color: #fff;
+  color: $white-color;
 }
 
 form.aligned {
@@ -80,8 +88,8 @@ form.aligned {
 }
 
 button {
-  background-color: #32c24d;
-  color: #fff;
+  background-color: $button-color;
+  color: $white-color;
   box-shadow: none;
   border: none;
   outline: none;
@@ -97,7 +105,7 @@ button:hover {
 }
 
 button.Error {
-  background-color: #d8000c;
+  background-color: $error-color;
 }
 
 button.Error:hover {
@@ -105,7 +113,7 @@ button.Error:hover {
 }
 
 button:disabled {
-  background-color: #ccc;
+  background-color: $grey-color;
   color: #666666;
   cursor: not-allowed;
 }
@@ -122,7 +130,7 @@ button:disabled {
   animation: load7 1.8s infinite ease-in-out;
 }
 .Loader {
-  color: #32c24d;
+  color: $button-color;
   font-size: 10px;
   margin: 0 auto 40px auto;
   position: relative;
@@ -174,7 +182,7 @@ button:disabled {
   border-radius: 2px;
   padding: 5px;
   margin: 10px;
-  color: #d8000c;
+  color: $error-color;
   background-color: #ffbaba;
 }
 
@@ -190,7 +198,7 @@ button:disabled {
 /* Overwriting default DatePicker Styles */
 
 .react-datepicker {
-  border-color: #ccc !important;
+  border-color: $grey-color !important;
 }
 
 .react-datepicker__input-container, .react-datepicker-wrapper {
@@ -204,7 +212,7 @@ button:disabled {
 .react-datepicker__day--selected:hover,
 .react-datepicker__day--in-selecting-range:hover,
 .react-datepicker__day--in-range:hover {
-  background-color: #c2325f !important;
+  background-color: $input-bg-color !important;
 }
 
 .react-datepicker__header {
@@ -214,5 +222,5 @@ button:disabled {
 .react-datepicker__current-month,
 .react-datepicker-time__header,
 .react-datepicker__day-name {
-  color: #ffffff !important;
+  color: $white-color !important;
 }
