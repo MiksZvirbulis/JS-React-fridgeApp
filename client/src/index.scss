@@ -4,7 +4,9 @@ $button-color: #32c24d;
 $white-color: #ffffff;
 $grey-color: #cccccc;
 $input-bg-color: #c2325f;
-$error-color: #d8000c;
+$error-text-color: #d8000c;
+$info-text-color: #ffae42;
+$success-text-color: #4f8a10;
 
 html, body {
   margin: 0;
@@ -18,15 +20,15 @@ html, body {
 }
 
 b.Success {
-  color: green;
+  color: $success-text-color;
 }
 
 b.Error {
-  color: red;
+  color: $error-text-color;
 }
 
 b.Neutral {
-  color: orange;
+  color: $info-text-color;
 }
 
 form {
@@ -40,11 +42,13 @@ form {
 
 form > div {
   width: 70%;
+
+  &.aligned {
+    text-align: center;
+  }
 }
 
-input,
-select,
-textarea {
+input, select, textarea {
   display: flex;
   height: 40px;
   text-indent: 5px;
@@ -57,34 +61,24 @@ textarea {
   box-sizing: border-box;
   font-family: inherit;
   font-size: 12px;
+
+  &:focus {
+    outline: none;
+  }
+
+  &.invalid {
+    border: 1px solid $info-text-color;
+  }
+
+  &::placeholder {
+    color: $white-color;
+  }
 }
 
 textarea {
   padding: 5px;
   min-height: 50px;
   resize: vertical;
-}
-
-input:focus,
-select:focus,
-textarea:focus {
-  outline: none;
-}
-
-input.invalid,
-select.invalid,
-textarea.invalid {
-  border: 1px solid #ffae42;
-}
-
-input::placeholder,
-select::placeholder,
-textarea::placeholder {
-  color: $white-color;
-}
-
-form.aligned {
-  text-align: center;
 }
 
 button {
@@ -98,37 +92,26 @@ button {
   padding: 10px;
   border-radius: 2px;
   margin: 5px;
+
+  &:hover {
+    background-color: #228535;
+  }
+  
+  &.Error {
+    background-color: $error-text-color;
+
+    &:hover {
+      background-color: #dc3545;
+    }
+  }
+  
+  &:disabled {
+    background-color: $grey-color;
+    color: #666666;
+    cursor: not-allowed;
+  }
 }
 
-button:hover {
-  background-color: #228535;
-}
-
-button.Error {
-  background-color: $error-color;
-}
-
-button.Error:hover {
-  background-color: #dc3545;
-}
-
-button:disabled {
-  background-color: $grey-color;
-  color: #666666;
-  cursor: not-allowed;
-}
-
-.Loader,
-.Loader:before,
-.Loader:after {
-  border-radius: 50%;
-  width: 2.5em;
-  height: 2.5em;
-  -webkit-animation-fill-mode: both;
-  animation-fill-mode: both;
-  -webkit-animation: load7 1.8s infinite ease-in-out;
-  animation: load7 1.8s infinite ease-in-out;
-}
 .Loader {
   color: $button-color;
   font-size: 10px;
@@ -140,20 +123,32 @@ button:disabled {
   transform: translateZ(0);
   -webkit-animation-delay: -0.16s;
   animation-delay: -0.16s;
-}
-.Loader:before,
-.Loader:after {
-  content: '';
-  position: absolute;
-  top: 0;
-}
-.Loader:before {
-  left: -3.5em;
-  -webkit-animation-delay: -0.32s;
-  animation-delay: -0.32s;
-}
-.Loader:after {
-  left: 3.5em;
+
+  &, &:before, &:after {
+    border-radius: 50%;
+    width: 2.5em;
+    height: 2.5em;
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both;
+    -webkit-animation: load7 1.8s infinite ease-in-out;
+    animation: load7 1.8s infinite ease-in-out;
+  }
+
+  &:before, &:after {
+    content: '';
+    position: absolute;
+    top: 0;
+  }
+
+  &:before {
+    left: -3.5em;
+    -webkit-animation-delay: -0.32s;
+    animation-delay: -0.32s;
+  }
+
+  &:after {
+    left: 3.5em;
+  }
 }
 @-webkit-keyframes load7 {
   0%,
@@ -182,7 +177,7 @@ button:disabled {
   border-radius: 2px;
   padding: 5px;
   margin: 10px;
-  color: $error-color;
+  color: $error-text-color;
   background-color: #ffbaba;
 }
 
@@ -191,7 +186,7 @@ button:disabled {
   border-radius: 2px;
   padding: 5px;
   margin: 10px;
-  color: #4f8a10;
+  color: $success-text-color;
   background-color: #dff2bf;
 }
 

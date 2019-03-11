@@ -13,6 +13,17 @@ input#toggle, label {
   display: none;
 }
 
+label {
+  @media screen and (max-width: 768px) {
+    display: flex;
+    height: 50px;
+    color: $white-color;
+    text-align: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+}
+
 ul {
   width: 100%;
   margin: 0;
@@ -22,12 +33,31 @@ ul {
   justify-content: flex-end;
   padding-inline-start: 0;
 
+  @media screen and (max-width: 768px) {
+    display: none;
+    flex-flow: row column;
+    align-items: center;
+    background-color: $bg-color;
+  }
+
   li {
     height: 50px;
     display: flex;
+
+    @media screen and (max-width: 768px) {
+      &, a {
+        width: 100%;
+      }
+    }
   
     &:hover {
       background-color: $active-color;
+
+      @media screen and (max-width: 768px) {
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+      }
     }
 
     &.logo {
@@ -59,40 +89,13 @@ ul {
   }
 }
 
-} // End of nested .Navigation elements
-
 @media screen and (max-width: 768px) {
-  .Navigation ul {
-    display: none;
-    flex-flow: row column;
-    align-items: center;
-    background-color: $bg-color;
-  }
-
-  .Navigation label {
-    display: flex;
-    height: 50px;
-    color: $white-color;
-    text-align: center;
-    justify-content: center;
-    flex-direction: column;
-  }
-
-  .Navigation ul li a,
-  .Navigation ul li {
-    width: 100%;
-  }
-
-  .Navigation ul li a:hover {
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-  }
-
-  .Navigation input#toggle:checked ~ ul {
+  input#toggle:checked ~ ul {
     display: flex;
     width: 100%;
     justify-content: center;
     border-top: 1px solid $white-color;
   }
 }
+
+} // End of nested .Navigation elements

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import Navigation from '../../components/Navigation/Navigation'
-import './Layout.css'
+import './Layout.scss'
 import Aux from 'react-aux';
 
 class Layout extends Component {
