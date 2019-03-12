@@ -1,5 +1,5 @@
 import React from 'react'
-import './FridgeItem.css'
+import './FridgeItem.scss'
 import { Link } from 'react-router-dom'
 import transformExpiry from '../../../utils/transformExpiry'
 

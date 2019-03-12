@@ -6,20 +6,21 @@
   padding: 5px;
   border-radius: 5px;
   flex: 20%;
-}
 
-.FridgeItem:hover {
-  background-color: #c2325f;
+  &:hover {
+    background-color: #c2325f;
+  }
+  
 }
 
 .ItemName {
   display: flex;
   flex-flow: column wrap;
   justify-content: center;
-}
 
-.ItemName:hover~.ItemDescription {
-  display: block;
+  &:hover ~ .ItemDescription {
+    display: block;
+  }
 }
 
 .ItemDescription {

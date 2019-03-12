@@ -1,7 +1,7 @@
 // component
 import React, { PureComponent } from 'react'
 import FridgeItem from './FridgeItem/FridgeItem'
-import './FridgeItems.css'
+import './FridgeItems.scss'
 import { Link } from 'react-router-dom'
 import errorHandler from '../../utils/errorHandler'
 import * as actions from '../../store/actions'

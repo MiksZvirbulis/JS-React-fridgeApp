@@ -5,14 +5,15 @@
   flex-flow: row wrap;
   box-sizing: border-box;
   justify-content: center;
-}
 
-.FridgeItems a {
-  text-decoration: none;
-  color: #fff;
-}
+  a {
+    text-decoration: none;
+    color: #fff;
+  }
 
-.FridgeItems .Search {
-  display: block;
-  width: 100%;
+  .Search {
+    display: block;
+    width: 100%;
+  }
+  
 }
