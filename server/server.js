@@ -11,13 +11,12 @@ const fridge = require('./routes/fridge')
 
 const app = express()
 
-// Database
 const mysql = require('mysql')
 connection = mysql.createConnection({
-  host: 'localhost',
-  user: 'miks',
-  password: 'password1',
-  database: 'fridge'
+  host: 'us-cdbr-iron-east-03.cleardb.net',
+  user: 'b42a9e5f54615c',
+  password: '103d599d',
+  database: 'heroku_3058739cbfcd875'
 })
 connection.connect()
 
