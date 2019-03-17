@@ -14,6 +14,8 @@ const withAuth = function(req, res, next) {
         connection.query("SELECT u.id AS uId, f.id AS fId FROM users u LEFT JOIN fridges f ON f.user_id = u.id WHERE `username` = ?", [req.username], (findUserError, findUserResult) => {
           if (findUserError) {
             console.log(findUserError)
+          } else if (findUserResult.length === 0) {
+            console.log("No user found")
           } else {
             req.userId = findUserResult[0].uId
             req.fridgeId = findUserResult[0].fId

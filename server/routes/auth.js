@@ -84,7 +84,7 @@ exports.login = (req, res) => {
                         const token = jwt.sign(payload, secret, {
                             expiresIn: '1h'
                         })
-                        res.cookie('token', token, { httpOnly: true }).status(200).json({ userId: user[0].uId, fridgeId: user[0].fId })
+                        res.cookie('token', token, { httpOnly: false }).status(200).json({ userId: user[0].uId, fridgeId: user[0].fId })
                     }
                 }
             })

@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Redirect } from 'react-router-dom'
 import axios from 'axios'
 
-const API_URL = '/api/auth/'
+const API_URL = 'https://fridge-app-miks.herokuapp.com/api/auth/'
 
 export default function withAuth(AuthComponent) {
 
@@ -24,7 +24,7 @@ export default function withAuth(AuthComponent) {
         componentDidMount() {
             this._isMounted = true
 
-            this.checkAuth({method: 'get', url: API_URL + 'check', timeout: 60000})
+            this.checkAuth({method: 'get', url: API_URL + 'check', timeout: 60000, withCredentials: true})
             .then(response => {
                 if (response.status === 200) {
                     if (this._isMounted) {

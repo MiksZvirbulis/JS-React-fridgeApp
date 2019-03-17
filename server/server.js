@@ -1,42 +1,36 @@
 // Express Set-up
 const express = require('express')
 const router = express.Router()
-const port = process.env.PORT || 5000
 const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
+const cors = require('cors')
+
+const app = express()
+
+// Use cookie parser
+app.use(cookieParser())
+
+// Cors
+app.use(cors({credentials: true, origin: true}))
 
 // Requiring Routes
 const auth = require('./routes/auth')
 const fridge = require('./routes/fridge')
 
-const app = express()
-
+// Setting up MySQL
 const mysql = require('mysql')
 connection = mysql.createConnection({
-  host: 'us-cdbr-iron-east-03.cleardb.net',
-  user: 'b42a9e5f54615c',
-  password: '103d599d',
-  database: 'heroku_3058739cbfcd875'
+  host: 'zj2x67aktl2o6q2n.cbetxkdyhwsb.us-east-1.rds.amazonaws.com',
+  user: 'kcpghbjr1ngivft3',
+  password: 'c5hrvkugs0d0y0i3',
+  database: 'bmbzgd5zfhuo08cy'
 })
 connection.connect()
 
 // Setting /api as the default route for API requests, Body Parser & setting headers for a RestAPI
 app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({
-  extended: true
-}))
-app.use(cookieParser())
+app.use(bodyParser.urlencoded({ extended: true }))
 app.use('/api', router)
-router.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*')
-  res.header('Access-Control-Allow-Credentials', true)
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
-  if (req.method === 'OPTIONS') {
-    res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE')
-    return res.status(200).json({})
-  }
-  next();
-});
 
 // Requiring utilities & middleware
 dataValidation = require('./utils/dataValidation')
@@ -73,4 +67,4 @@ router.post('/auth/logout', withAuth, auth.logout)
 // Check if logged in
 router.get('/auth/check', withAuth, (req, res) => { res.status(200).json({ userId: req.userId, fridgeId: req.fridgeId}) })
 
-app.listen(port, () => console.log(`Server listening on port ${port}`))
+app.listen(process.env.PORT || 5000, () => console.log(`Server listening on port ${process.env.PORT || 5000}`))

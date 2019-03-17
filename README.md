@@ -15,6 +15,13 @@ Mainly and most importantly - reduce food waste. However, it may also be for mon
 * Responsive Design
 * Sign up & Login
 
+## Demo
+https://upbeat-haibt-2b9c8d.netlify.com/
+
+* Username: demo
+* Password: demo12345
+* Or sign up your own account
+
 ## How to Run in Dev
 Run MySQL Server
 
@@ -78,5 +85,4 @@ cd client && npm start
 
 ## Coming Soon
 
-* API Access Middleware
 * General Improvements

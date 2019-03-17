@@ -1,7 +1,7 @@
 import * as AT from '../actionTypes'
 import axios from 'axios'
 
-const API_URL = '/api/auth'
+const API_URL = 'https://fridge-app-miks.herokuapp.com/api/auth'
 
 // SIGNUP
 
@@ -41,7 +41,7 @@ export const authLoginAsync = userData => {
     return async dispatch => {
         dispatch(authLogin());
         try {
-            const response = await axios.post(API_URL + '/login', userData)
+            const response = await axios.post(API_URL + '/login', userData, { withCredentials: true })
             if (response.status === 200) {
                 dispatch(authLoginSuccess(response.data))
             } else {
@@ -65,7 +65,7 @@ export const authLogoutAsync = userData => {
     return async dispatch => {
         dispatch(authLogout());
         try {
-            const response = await axios.post(API_URL + '/logout', userData)
+            const response = await axios.post(API_URL + '/logout', userData, { withCredentials: true })
             if (response.status === 200) {
                 dispatch(authLogoutSuccess())
             } else {

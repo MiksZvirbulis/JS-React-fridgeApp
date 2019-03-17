@@ -111,7 +111,6 @@ class EditItem extends Component {
 
   componentWillMount() {
     this._isMounted = true
-    if (this.props.item.length === 0) {
     Promise.resolve(this.props.fetchItem(this.props.match.params.id))
     .then(response => {
       if (this.props.error) {
@@ -129,7 +128,6 @@ class EditItem extends Component {
         }
       }
     })
-  }
   }
 
   componentWillUnmount() {
