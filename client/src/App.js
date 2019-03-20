@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react'
-import { Switch, Route } from 'react-router-dom'
+import { Switch, Route, NavLink } from 'react-router-dom'
 import { withRouter } from 'react-router'
 
 // Redux
@@ -36,6 +36,7 @@ class App extends PureComponent {
       <Route path="/add" component={withAuth(AddItem)} />
       <Route path="/access" component={withAuth(Access)} />
       <Route path="/edit/:id" component={withAuth(EditItem)} />
+      <Route render={() => <div id="error">Page was not found. Click <NavLink to="/">here</NavLink> to go back to the fridge!</div> } />
       </Switch>
       </Layout>
     )
